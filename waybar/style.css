@@ -1,0 +1,300 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+ *
+ * =========================================================================== */
+
+/* -----------------------------------------------------------------------------
+ * Keyframes
+ * -------------------------------------------------------------------------- */
+
+@keyframes blink-warning {
+	70% {
+		color: @light;
+	}
+
+	to {
+		color: @light;
+		background-color: @warning;
+	}
+}
+
+@keyframes blink-critical {
+	70% {
+		color: @light;
+	}
+
+	to {
+		color: @light;
+		background-color: @critical;
+	}
+}
+
+
+/* COLOURS */
+
+/* Sidetracked Day */
+@define-color light #f9f3c3;
+@define-color dark #161628;
+@define-color warning #fabd2f;
+@define-color critical #cc241d;
+@define-color mode #a89984;
+@define-color workspaces #44517f;
+@define-color workspacesfocused #697398;
+@define-color sound #fec133;
+@define-color network #e5be99;
+@define-color memory #de9a97;
+@define-color cpu #968b9d;
+@define-color gpu #5991d2;
+@define-color layout #374a8c;
+@define-color battery #161628;
+@define-color date #161628;
+@define-color time #f9f3c3;
+
+
+/* Gruvbox */ /*
+@define-color light #ebdbb2;
+@define-color dark #282828;
+@define-color warning #fabd2f;
+@define-color critical #cc241d;
+@define-color mode #a89984;
+@define-color workspaces #458588;
+@define-color workspacesfocused #83a598;
+@define-color sound #d3869b;
+@define-color network #b16286;
+@define-color memory #8ec07c;
+@define-color cpu #98971a;
+@define-color gpu #b8bb26;
+@define-color layout #689d6a;
+@define-color battery #282828;
+@define-color date #282828;
+@define-color time #ebdbb2; */
+
+/* Reset all styles */
+* {
+	border: none;
+	border-radius: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/* The whole bar */
+#waybar {
+	background: transparent;
+	color: @dark;
+	font-family: Terminus, Siji;
+	font-size: 10pt;
+	/*font-weight: bold;*/
+}
+
+/* Each module */
+/*#custom-waybar-mpris,*/
+#battery,
+#clock,
+#cpu,
+#language,
+#memory,
+#mode,
+#network,
+#pulseaudio,
+#custom-gpu,
+#custom-alsa,
+#sndio,
+#tray {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+/* Each module that should blink */
+#mode,
+#memory,
+/*#custom-gpu,*/
+#battery {
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+/* Each critical module */
+#memory.critical,
+#cpu.critical,
+#battery.critical {
+	color: @critical;
+}
+
+/* Each critical that should blink */
+#mode,
+#memory.critical,
+#battery.critical.discharging {
+	animation-name: blink-critical;
+	animation-duration: 2s;
+}
+
+/* Each warning */
+#network.disconnected,
+#memory.warning,
+#cpu.warning,
+#battery.warning {
+	color: @warning;
+}
+
+/* Each warning that should blink */
+#battery.warning.discharging {
+	animation-name: blink-warning;
+	animation-duration: 3s;
+}
+
+/* And now modules themselves in their respective order */
+
+#mode { /* Shown current Sway mode (resize etc.) */
+	color: @light;
+	background: @mode;
+}
+
+/* Workspaces stuff */
+#workspaces button {
+	/*font-weight: bold;*/
+	padding-left: 4px;
+	padding-right: 4px;
+	color: @dark;
+	background: @workspaces;
+}
+
+#workspaces button.focused {
+	background: @workspacesfocused;
+}
+
+/*#workspaces button.urgent {
+	border-color: #c9545d;
+	color: #c9545d;
+}*/
+
+#window {
+	margin-right: 40px;
+	margin-left: 40px;
+}
+
+/*#custom-waybar-mpris {
+	padding-left: 4px;
+	padding-right: 4px;
+	color: @light;
+	background: @dark;
+}*/
+
+#custom-alsa,
+#pulseaudio,
+#sndio {
+	background: @sound;
+	color: @dark;
+}
+
+#network {
+	background: @network;
+	color: @dark;
+}
+
+#memory {
+	background: @memory;
+	color: @dark;
+}
+
+#cpu {
+	background: @cpu;
+	color: @light;
+}
+
+#custom-gpu {
+	background: @gpu;
+	color: @dark;
+}
+
+#language {
+	background: @layout;
+	color: @light;
+}
+
+#battery {
+	background: @battery;
+	color: @dark;
+}
+
+#tray {
+	background: @date;
+}
+
+#clock.date {
+	background: @date;
+	color: @light;
+}
+
+#clock.time {
+	background: @time;
+	color: @dark;
+}
+
+#pulseaudio.muted {
+	/* No styles */
+}
+
+#custom-arrow1 {
+	font-size: 16px;
+	color: @sound;
+	background: transparent;
+}
+
+#custom-arrow2 {
+	font-size: 16px;
+	color: @network;
+	background: @sound;
+}
+
+#custom-arrow3 {
+	font-size: 16px;
+	color: @memory;
+	background: @network;
+}
+
+#custom-arrow4 {
+	font-size: 16px;
+	color: @cpu;
+	background: @memory;
+}
+
+#custom-arrow5 {
+	font-size: 16px;
+	color: @gpu;
+	background: @cpu;
+}
+
+#custom-arrow6 {
+	font-size: 16px;
+	color: @layout;
+	background: @gpu;
+}
+
+#custom-arrow7 {
+	font-size: 16px;
+	color: @battery;
+	background: @layout;
+}
+
+#custom-arrow8 {
+	font-size: 16px;
+	color: @date;
+	background: @battery;
+}
+
+#custom-arrow9 {
+	font-size: 16px;
+	color: @time;
+	background: @date;
+}
+
+#custom-arrow10 {
+	font-size: 16px;
+	color: @workspaces;
+	background: transparent;
+}
