@@ -113,8 +113,8 @@ input type:keyboard {
 	# Resize them with right mouse button + $mod.
 	# Mouse button for dragging.
 	floating_modifier $mod normal
-	# $mod + middle mouse button toggles between floating and tiling for a window
-	bindsym $mod+button2 floating toggle
+	# $mod + full stop button toggles between floating and tiling
+	bindsym $mod+period floating toggle
 	
     # Move your focus around
     bindsym $mod+$left focus left
