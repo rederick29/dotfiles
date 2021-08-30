@@ -35,7 +35,7 @@
 
 /* COLOURS */
 
-/* Sidetracked Day */
+/* Sidetracked Day 
 @define-color light #f9f3c3;
 @define-color dark #161628;
 @define-color warning #fabd2f;
@@ -52,9 +52,9 @@
 @define-color battery #161628;
 @define-color date #161628;
 @define-color time #f9f3c3;
+*/
 
-
-/* Gruvbox */ /*
+/* Gruvbox */ 
 @define-color light #ebdbb2;
 @define-color dark #282828;
 @define-color warning #fabd2f;
@@ -62,15 +62,15 @@
 @define-color mode #a89984;
 @define-color workspaces #458588;
 @define-color workspacesfocused #83a598;
-@define-color sound #d3869b;
-@define-color network #b16286;
-@define-color memory #8ec07c;
-@define-color cpu #98971a;
-@define-color gpu #b8bb26;
-@define-color layout #689d6a;
+@define-color sound #fabd2f;
+@define-color network #8ec07c;
+@define-color memory #689d6a;
+@define-color cpu #83a598;
+@define-color gpu #458588;
+@define-color layout #b16286;
 @define-color battery #282828;
 @define-color date #282828;
-@define-color time #ebdbb2; */
+@define-color time #ebdbb2; 
 
 /* Reset all styles */
 * {
@@ -203,12 +203,12 @@
 
 #cpu {
 	background: @cpu;
-	color: @light;
+	color: @dark;
 }
 
 #custom-gpu {
 	background: @gpu;
-	color: @dark;
+	color: @light;
 }
 
 #language {

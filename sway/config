@@ -252,12 +252,33 @@ bar {
 ## Title bars, focusing, etc
 
 # Colours
+
+# gruvbox much?
+# reference: https://github.com/morhetz/gruvbox#palette
+set $c0		#282828
+set $c1		#cc241d
+set $c2  	#98971a
+set $c3 	#d79921
+set $c4   	#458588
+set $c5 	#b16286
+set $c6		#689d8a
+set $c7		#a89984
+set $c8		#928374
+set $c9		#fb4934
+set $c10	#b8bb26
+set $c11	#fabd2f
+set $c12	#83a598
+set $c13	#d3869b
+set $c14	#8ec07c
+set $c15	#ebdbb2
+set $c0_h	#1d2021
+
 # class                 border  backgr. text    indicator child_border
-client.focused 			#5991d2 #374a8c #f9f3c3 #161628   #5991d2	 
-client.focused_inactive	#374a8c #161628 #f9f3c3 #161628   #374a8c
-client.unfocused		#161628 #161628 #f9f3c3 #374a8c   #161628
-client.urgent			#fec133 #f9f3c3 #161628 #e5be99   #fec133
-client.placeholder		#000000 #161628 #f9f3c3 #000000   #000000
+client.focused 			$c3 	$c0_h	$c3		$c5		  $c3 
+client.focused_inactive	$c0_h	$c0_h	$c3		$c5		  $c0_h
+client.unfocused		$c0_h	$c0_h	$c3		$c5		  $c0_h
+client.urgent			$c1 	$c1 	$c15	$c1 	  $c1
+client.placeholder		
 
 # Align window title to centre of titlebar
 title_align center
