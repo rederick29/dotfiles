@@ -4,8 +4,8 @@
 #
 # Read `man 5 sway` for a complete reference.
 
+
 ### Variables
-#
 
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
@@ -32,6 +32,9 @@ set $slurp ~/.config/sway/scripts/slurp.sh
 ### Output configuration
 #
 
+# the devil itself
+xwayland enable
+
 # Wallpaper
 output * bg /home/erickv/Downloads/map/BG.jpg fill
 #output HDMI-A-2 bg /home/erickv/Downloads/wall_secondary.png fill
@@ -42,14 +45,6 @@ output HDMI-A-2 position 1920,0
 
 # VRR
 output * adaptive_sync on
-
-# Borders
-default_border normal 1
-hide_edge_borders smart 
-
-# Gaps
-gaps inner 2
-gaps outer 2
 
 ### Idle configuration
 exec swayidle -w \
@@ -254,5 +249,39 @@ bar {
 }
 
 
+## Title bars, focusing, etc
+
+# Colours
+# class                 border  backgr. text    indicator child_border
+client.focused 			#5991d2 #374a8c #f9f3c3 #161628   #5991d2	 
+client.focused_inactive	#374a8c #161628 #f9f3c3 #161628   #374a8c
+client.unfocused		#161628 #161628 #f9f3c3 #374a8c   #161628
+client.urgent			#fec133 #f9f3c3 #161628 #e5be99   #fec133
+client.placeholder		#000000 #161628 #f9f3c3 #000000   #000000
+
+# Align window title to centre of titlebar
+title_align center
+
+# Borders
+# with titlebar = normal, without = pixel
+# default_border normal 1
+default_border pixel 1
+hide_edge_borders none 
+
+# Gaps
+gaps inner 5
+gaps outer 3
+
+# Don't auto focus windows
+no_focus [window_role="pop-up"]
+no_focus [window_type="popup_menu"]
+no_focus [window_type="notification"]
+no_focus [window_type="splash"]
+
+# Stop focus from following pointer
+focus_follows_mouse no
+
+# Don't interrupt fullscreen unless it is the fullscreen app that creates a pop-up
+popup_during_fullscreen smart
 
 include /etc/sway/config.d/*
