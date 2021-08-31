@@ -50,6 +50,8 @@ output * adaptive_sync on
 exec swayidle -w \
          timeout 300 '$lock' \
          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' \
+         before-sleep 'playerctl pause' \
          before-sleep '$lock'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -294,10 +296,10 @@ gaps inner 5
 gaps outer 3
 
 # Don't auto focus windows
-no_focus [window_role="pop-up"]
-no_focus [window_type="popup_menu"]
-no_focus [window_type="notification"]
-no_focus [window_type="splash"]
+#no_focus [window_role="pop-up"]
+#no_focus [window_type="popup_menu"]
+#no_focus [window_type="notification"]
+#no_focus [window_type="splash"]
 
 # Stop focus from following pointer
 focus_follows_mouse no
