@@ -18,8 +18,8 @@
 	"modules-left": [
 		"sway/mode",
 		"sway/workspaces",
-		"custom/arrow10"
-		//"custom/waybar-mpris"
+		"custom/arrow11"
+		//"custom/getplayerctl"
 		//"sway/window"
 	],
 
@@ -33,21 +33,23 @@
 		"pulseaudio",
 		//"sndio",
 		"custom/arrow2",
-		"network",
+		"custom/getplayerctl",
 		"custom/arrow3",
-		"memory",
+		"network",
 		"custom/arrow4",
-		"cpu",
+		"memory",
 		"custom/arrow5",
-		"custom/gpu",
+		"cpu",
 		"custom/arrow6",
-		"sway/language",
+		"custom/gpu",
 		"custom/arrow7",
+		"sway/language",
+		"custom/arrow8",
 		//"battery",
-		//"custom/arrow8",
+		//"custom/arrow9",
 		"tray",
 		"clock#date",
-		"custom/arrow9",
+		"custom/arrow10",
 		"clock#time"
 	],
 
@@ -177,6 +179,15 @@
 		//"min-length": 19,
 	},
 
+	"custom/getplayerctl": {
+		"exec": "$HOME/.config/waybar/custom_modules/custom-getplayerctl.sh",
+		"return-type": "json",
+		"format": "{}",
+		"interval": 2,
+		"tooltip": "{tooltip}",
+		"max-length": 19
+	},
+
 	"custom/alsa": {
 		"exec": "amixer get Master | sed -nre 's/.*\\[off\\].*/ muted/p; s/.*\\[(.*%)\\].*/ \\1/p'",
 		"on-click": "amixer set Master toggle; pkill -x -RTMIN+11 waybar",
@@ -250,6 +261,11 @@
 	},
 
 	"custom/arrow10": {
+		"format": "",
+		"tooltip": false
+	},
+
+	"custom/arrow11": {
 		"format": "",
 		"tooltip": false
 	}

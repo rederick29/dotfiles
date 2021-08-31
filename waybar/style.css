@@ -63,6 +63,7 @@
 @define-color workspaces #458588;
 @define-color workspacesfocused #83a598;
 @define-color sound #fabd2f;
+@define-color getplayerctl #d79921;
 @define-color network #8ec07c;
 @define-color memory #689d6a;
 @define-color cpu #83a598;
@@ -101,6 +102,7 @@
 #network,
 #pulseaudio,
 #custom-gpu,
+custom-getplayerctl,
 #custom-alsa,
 #sndio,
 #tray {
@@ -191,6 +193,11 @@
 	color: @dark;
 }
 
+#custom-getplayerctl {
+	background: @getplayerctl;
+	color: @light;
+}
+
 #network {
 	background: @network;
 	color: @dark;
@@ -247,53 +254,59 @@
 
 #custom-arrow2 {
 	font-size: 16px;
-	color: @network;
+	color: @getplayerctl;
 	background: @sound;
 }
 
 #custom-arrow3 {
 	font-size: 16px;
+	color: @network;
+	background: @getplayerctl;
+}
+
+#custom-arrow4 {
+	font-size: 16px;
 	color: @memory;
 	background: @network;
 }
 
-#custom-arrow4 {
+#custom-arrow5 {
 	font-size: 16px;
 	color: @cpu;
 	background: @memory;
 }
 
-#custom-arrow5 {
+#custom-arrow6 {
 	font-size: 16px;
 	color: @gpu;
 	background: @cpu;
 }
 
-#custom-arrow6 {
+#custom-arrow7 {
 	font-size: 16px;
 	color: @layout;
 	background: @gpu;
 }
 
-#custom-arrow7 {
+#custom-arrow8 {
 	font-size: 16px;
 	color: @battery;
 	background: @layout;
 }
 
-#custom-arrow8 {
+#custom-arrow9 {
 	font-size: 16px;
 	color: @date;
 	background: @battery;
 }
 
-#custom-arrow9 {
+#custom-arrow10 {
 	font-size: 16px;
 	color: @time;
 	background: @date;
 }
 
-#custom-arrow10 {
+#custom-arrow11 {
 	font-size: 16px;
 	color: @workspaces;
 	background: transparent;
