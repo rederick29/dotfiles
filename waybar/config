@@ -183,9 +183,12 @@
 		"exec": "$HOME/.config/waybar/custom_modules/custom-getplayerctl.sh",
 		"return-type": "json",
 		"format": "{}",
+		"on-click": "playerctl --ignore-player=chromium play-pause",
+		"on-scroll-up": "playerctl --ignore-player=chromium next",
+		"on-scroll-down": "playerctl previous",
 		"interval": 2,
 		"tooltip": "{tooltip}",
-		"max-length": 19
+		"max-length": 20
 	},
 
 	"custom/alsa": {
