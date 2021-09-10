@@ -186,7 +186,7 @@
 		"on-click": "playerctl --ignore-player=chromium play-pause",
 		"on-scroll-up": "playerctl --ignore-player=chromium next",
 		"on-scroll-down": "playerctl previous",
-		"interval": 2,
+		"interval": 5,
 		"tooltip": "{tooltip}",
 		"max-length": 20
 	},
