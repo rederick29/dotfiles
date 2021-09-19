@@ -17,6 +17,7 @@
 
 	"modules-left": [
 		"sway/mode",
+		"idle_inhibitor",
 		"sway/workspaces",
 		"custom/arrow11"
 		//"custom/getplayerctl"
@@ -56,6 +57,14 @@
 	// -------------------------------------------------------------------------
 	// Modules
 	// -------------------------------------------------------------------------
+
+	"idle_inhibitor": {
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "",
+			"deactivated": "鬒"
+		}
+	},
 
 	"battery": {
 		"interval": 1,
@@ -160,7 +169,7 @@
 		"format-icons": {
 			"headphones": "",
 			"handsfree": "",
-			"headset": "",
+			"headset": "",
 			"phone": "",
 			"portable": "",
 			"car": "",

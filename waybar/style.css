@@ -93,6 +93,7 @@
 
 /* Each module */
 /*#custom-waybar-mpris,*/
+#idle_inhibitor,
 #battery,
 #clock,
 #cpu,
@@ -102,7 +103,7 @@
 #network,
 #pulseaudio,
 #custom-gpu,
-custom-getplayerctl,
+#custom-getplayerctl,
 #custom-alsa,
 #sndio,
 #tray {
@@ -154,6 +155,12 @@ custom-getplayerctl,
 #mode { /* Shown current Sway mode (resize etc.) */
 	color: @light;
 	background: @mode;
+}
+
+#idle_inhibitor {
+	padding-left: 4px;
+	color: @dark;
+	background: @workspaces;
 }
 
 /* Workspaces stuff */
