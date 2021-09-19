@@ -4,6 +4,8 @@
 #
 # Read `man 5 sway` for a complete reference.
 
+# Start notification daemon
+exec mako
 
 ### Variables
 
@@ -50,7 +52,7 @@ output * adaptive_sync on
 exec swayidle -w \
          timeout 300 '$lock' \
          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' \
+         timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"' \
          before-sleep 'playerctl pause' \
          before-sleep '$lock'
 
@@ -73,11 +75,12 @@ exec swayidle -w \
 # Read `man 5 sway-input` for more information about this section.
 
 # UK keyboard
-input type:keyboard {
-	xkb_layout "gb"
+input "type:keyboard" {
+	xkb_layout custom
+	xkb_model "pc104"
 }
 
-input type:pointer {
+input "type:pointer" {
 	accel_profile flat
 	pointer_accel 0.0
 }
