@@ -106,9 +106,10 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ls="exa -l --color=always"
+alias ls="exa -hl --color=always"
 alias cat="bat"
 alias cp="rsync -avzh --progress"
+alias icat="kitty +kitten icat"
 
 export GPG_TTY=$(tty)
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
