@@ -1,15 +1,51 @@
 call plug#begin('~/.config/nvim/plugged')
 
+" Airline and themes
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'navarasu/onedark.nvim'
+
+" Non-lsp syntax highlight and more
 Plug 'sheerun/vim-polyglot'
+
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " Update parsers on update
+
+" File explorer-like tree
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
+
+" Git support
 Plug 'airblade/vim-gitgutter'
+
+" Common configurations for neovim's LSP
 Plug 'neovim/nvim-lspconfig'
+
+" Completion support and sources
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp' " LSP completion
+Plug 'hrsh7th/cmp-vsnip' " snippet completion
+Plug 'hrsh7th/vim-vsnip' " snippet support
+Plug 'hrsh7th/vim-vsnip-integ' " snippet plugin integrations with others
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-buffer' " could make completion slow if buffer too large
+
+" Enables extra features of rust-analyzer
 Plug 'simrat39/rust-tools.nvim'
+
+" FZF
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" Fancy LSP plugin
+Plug 'glepnir/lspsaga.nvim'
+
+" Floating Terminal
+Plug 'akinsho/toggleterm.nvim'
+
+" Highlight colour previews
+Plug 'norcalli/nvim-colorizer.lua'
 
 call plug#end()
 
@@ -19,6 +55,104 @@ set termguicolors
 set nocompatible
 set clipboard=unnamedplus
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<,space:·
+syntax enable
+autocmd BufWritePre * :%s/\s\+$//e
+set hidden
+
+" ===========
+" Colourizer:
+" ===========
+lua require'colorizer'.setup()
+
+" =========
+" Terminal:
+" =========
+lua require("toggleterm").setup{}
+
+" ====
+" LSP:
+" ====
+lua <<EOF
+local nvim_lsp = require'lspconfig'
+require'lspconfig'.clangd.setup{}
+local opts = {
+    tools = { -- rust-tools options
+        autoSetHints = true,
+        hover_with_actions = true,
+        inlay_hints = {
+            show_parameter_hints = false,
+            parameter_hints_prefix = "",
+            other_hints_prefix = "",
+        },
+    },
+
+    -- all the opts to send to nvim-lspconfig
+    -- these override the defaults set by rust-tools.nvim
+    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+    server = {
+        -- on_attach is a callback called when the language server attachs to the buffer
+        -- on_attach = on_attach,
+        settings = {
+            -- to enable rust-analyzer settings visit:
+            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
+            ["rust-analyzer"] = {
+                -- enable clippy on save
+                checkOnSave = {
+                    command = "clippy"
+                },
+            }
+        }
+    },
+}
+
+require('rust-tools').setup(opts)
+EOF
+
+" ===========
+" Completion:
+" ===========
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+
+lua <<EOF
+local cmp = require'cmp'
+cmp.setup({
+  -- Enable LSP snippets
+  snippet = {
+    expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    -- Add tab support
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.close(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })
+  },
+
+  -- Installed sources
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+    { name = 'cmdline' }
+  },
+})
+EOF
+
+" ============
+" Indentation: always 4 spaces per <tab>
+" ============
 set tabstop=4
 set softtabstop=-1
 set shiftwidth=0
@@ -29,21 +163,19 @@ set cpoptions+=I
 set smartindent
 set modelines=2
 set encoding=utf-8
-syntax enable
-autocmd BufWritePre * :%s/\s\+$//e
 
 " ==========
-" GitGutter
+" GitGutter:
 " ==========
 let g:gitgutter_signs=1
 highlight GitGutterAdd guifg=lightgreen
 highlight GitGutterChange guifg=lightblue
 highlight GitGutterDelete guifg=lightred
 highlight GitGutterChangeDelete guifg=lightred
-set signcolumn=auto
+set signcolumn=yes
 
 " ==============
-" Onedark Theme
+" Onedark Theme:
 " ==============
 let g:onedark_italic_comments = v:true
 let g:onedark_hide_ending_tildes = v:true
@@ -51,7 +183,7 @@ let g:onedark_style = 'darker'
 colorscheme onedark
 
 " ========
-" Airline
+" Airline:
 " ========
 let g:airline_powerline_fonts = 1
 
@@ -93,21 +225,21 @@ let g:airline_symbols.linenr = ' '
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty='⚡'
 
-
-" Tree sitter modules
-" ====================
+" =============
+" TreeSitter:
+" =============
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {
+    ensure_installed = "maintained",
+    highlight = {
     enable = true,
-		disable = { "vim", "rust" },
+        disable = { "vim", "rust" },
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
-  },
+    },
 }
 EOF
 
@@ -212,7 +344,7 @@ require'nvim-tree'.setup {
   update_cwd          = false,
   -- show lsp diagnostics in the signcolumn
   diagnostics = {
-    enable = true,
+    enable = false,
     icons = {
       hint = "",
       info = "",
