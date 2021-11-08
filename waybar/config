@@ -19,24 +19,24 @@
 		"sway/mode",
 		"idle_inhibitor",
 		"sway/workspaces",
-		"custom/arrow11"
+		"custom/arrow11",
 		//"custom/getplayerctl"
-		//"sway/window"
+		"sway/window"
 	],
 
 	//"modules-center": [
-	//	"sway/window"
+		//"sway/window"
 	//],
 
 	"modules-right": [
 		"custom/arrow1",
 		//"custom/alsa",
-		"pulseaudio",
+        "custom/getplayerctl",
 		//"sndio",
 		"custom/arrow2",
-		"custom/getplayerctl",
-		"custom/arrow3",
-		"network",
+        "pulseaudio",
+		//"custom/arrow3",
+		//"network",
 		"custom/arrow4",
 		"memory",
 		"custom/arrow5",
@@ -197,7 +197,7 @@
 		"on-scroll-down": "playerctl previous",
 		"interval": 5,
 		"tooltip": "{tooltip}",
-		"max-length": 20
+		"max-length": 25
 	},
 
 	"custom/alsa": {
@@ -233,32 +233,32 @@
 	},
 
 	"custom/arrow2": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow3": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow4": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow5": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow6": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow7": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 

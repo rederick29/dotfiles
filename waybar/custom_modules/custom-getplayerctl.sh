@@ -20,7 +20,7 @@ fi
 #current_position=$(playerctl metadata --format "{{ duration(position) }}")
 #time_remaining=$(playerctl metadata --format "{{ duration(mpris:length - position) }}")
 
-echo '{"text": "'$formatted_status' '$playing_title' ", "class": "custom-getplayerctl", "tooltip": "<b>Title: </b>'$playing_title'\n<b>Artist: </b>'$playing_artist'\n<b>Album: </b>'$playing_album'"}'
+echo '{"text":"'$formatted_status' '$playing_title'", "class": "custom-getplayerctl", "tooltip": "<b>Title: </b>'$playing_title'\n<b>Artist: </b>'$playing_artist'\n<b>Album: </b>'$playing_album'"}'
 
 # No tooltip ver
 #echo '{"text": "'$formatted_status' '$playing_title'", "class": "custom-getplayerctl"}'
