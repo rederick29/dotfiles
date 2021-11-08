@@ -24,7 +24,10 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | dmenu | xargs swaymsg exec --
+# set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
+for_window [app_id="ulauncher"] floating enable, border none
+
 
 # Scripts
 set $grim ~/.config/sway/scripts/grim.sh
@@ -38,7 +41,7 @@ set $slurp ~/.config/sway/scripts/slurp.sh
 xwayland enable
 
 # Wallpaper
-output * bg /home/erickv/Downloads/map/BG.jpg fill
+output * bg /home/erickv/Pictures/wallpaper.png fill
 #output HDMI-A-2 bg /home/erickv/Downloads/wall_secondary.png fill
 
 # Set refresh and pos
@@ -52,9 +55,7 @@ output * adaptive_sync on
 exec swayidle -w \
          timeout 300 '$lock' \
          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'playerctl pause' \
-         before-sleep '$lock'
+         timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"' \ before-sleep '$lock'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -92,7 +93,7 @@ input "type:pointer" {
 	# Screenshotting
 	bindsym Print exec $grim
 	bindsym $mod+Print exec $slurp
-	
+
     # Start a terminal
     bindsym $mod+Return exec $term
 
@@ -115,7 +116,7 @@ input "type:pointer" {
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 	bindsym $mod+p exec $lock
-	
+
 #
 # Moving around:
 #
@@ -125,7 +126,7 @@ input "type:pointer" {
 	floating_modifier $mod normal
 	# $mod + full stop button toggles between floating and tiling
 	bindsym $mod+period floating toggle
-	
+
     # Move your focus around
     bindsym $mod+$left focus left
     bindsym $mod+$down focus down
@@ -284,11 +285,11 @@ set $c15	#ebdbb2
 set $c0_h	#1d2021
 
 # class                 border  backgr. text    indicator child_border
-client.focused 			$c3 	$c0_h	$c3		$c5		  $c3 
+client.focused 			$c3 	$c0_h	$c3		$c5		  $c3
 client.focused_inactive	$c0_h	$c0_h	$c3		$c5		  $c0_h
 client.unfocused		$c0_h	$c0_h	$c3		$c5		  $c0_h
 client.urgent			$c1 	$c1 	$c15	$c1 	  $c1
-client.placeholder		
+client.placeholder
 
 # Align window title to centre of titlebar
 title_align center
@@ -297,7 +298,7 @@ title_align center
 # with titlebar = normal, without = pixel
 # default_border normal 1
 default_border pixel 1
-hide_edge_borders none 
+hide_edge_borders none
 
 # Gaps
 gaps inner 5
