@@ -8,6 +8,7 @@ Plug 'navarasu/onedark.nvim'
 " Non-lsp syntax highlight and more
 Plug 'sheerun/vim-polyglot'
 
+" Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " Update parsers on update
 
 " File explorer-like tree
@@ -16,36 +17,27 @@ Plug 'kyazdani42/nvim-tree.lua'
 
 " Git support
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 " Common configurations for neovim's LSP
 Plug 'neovim/nvim-lspconfig'
 
 " Completion support and sources
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp' " LSP completion
-Plug 'hrsh7th/cmp-vsnip' " snippet completion
-Plug 'hrsh7th/vim-vsnip' " snippet support
-Plug 'hrsh7th/vim-vsnip-integ' " snippet plugin integrations with others
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/cmp-buffer' " could make completion slow if buffer too large
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
 
 " Enables extra features of rust-analyzer
 Plug 'simrat39/rust-tools.nvim'
 
-" FZF
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-
-" Fancy LSP plugin
-Plug 'glepnir/lspsaga.nvim'
-
-" Floating Terminal
+" Open terminal window
 Plug 'akinsho/toggleterm.nvim'
 
 " Highlight colour previews
 Plug 'norcalli/nvim-colorizer.lua'
+
+" LaTex
+Plug 'vim-latex/vim-latex'
 
 call plug#end()
 
@@ -55,99 +47,38 @@ set termguicolors
 set nocompatible
 set clipboard=unnamedplus
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<,space:·
+filetype plugin on
 syntax enable
 autocmd BufWritePre * :%s/\s\+$//e
-set hidden
+" set hidden
 
 " ===========
-" Colourizer:
+" Colorizer:
 " ===========
 lua require'colorizer'.setup()
 
 " =========
 " Terminal:
 " =========
-lua require("toggleterm").setup{}
-
-" ====
-" LSP:
-" ====
+tnoremap <Esc> <C-\><C-n>
+augroup terminal
+  au TermOpen * startinsert
+augroup END
 lua <<EOF
-local nvim_lsp = require'lspconfig'
-require'lspconfig'.clangd.setup{}
-local opts = {
-    tools = { -- rust-tools options
-        autoSetHints = true,
-        hover_with_actions = true,
-        inlay_hints = {
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-
-    -- all the opts to send to nvim-lspconfig
-    -- these override the defaults set by rust-tools.nvim
-    -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
-    server = {
-        -- on_attach is a callback called when the language server attachs to the buffer
-        -- on_attach = on_attach,
-        settings = {
-            -- to enable rust-analyzer settings visit:
-            -- https://github.com/rust-analyzer/rust-analyzer/blob/master/docs/user/generated_config.adoc
-            ["rust-analyzer"] = {
-                -- enable clippy on save
-                checkOnSave = {
-                    command = "clippy"
-                },
-            }
-        }
-    },
-}
-
-require('rust-tools').setup(opts)
+require("toggleterm").setup{}
 EOF
 
-" ===========
-" Completion:
-" ===========
+" ===================
+" LSP and completion:
+" ===================
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 
-lua <<EOF
-local cmp = require'cmp'
-cmp.setup({
-  -- Enable LSP snippets
-  snippet = {
-    expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-  mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    -- Add tab support
-    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-    ['<Tab>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm({
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    })
-  },
-
-  -- Installed sources
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'vsnip' },
-    { name = 'path' },
-    { name = 'buffer' },
-    { name = 'cmdline' }
-  },
-})
+lua << EOF
+require('rust-tools').setup({})
+require'lspconfig'.rust_analyzer.setup(require"coq".lsp_ensure_capabilities())
+require'lspconfig'.clangd.setup{}
+require'lspconfig'.clangd.setup(require"coq".lsp_ensure_capabilities())
 EOF
 
 " ============
