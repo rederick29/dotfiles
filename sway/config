@@ -267,20 +267,20 @@ bar {
 
 # Onedark-darker
 # reference: https://github.com/navarasu/onedark.nvim/blob/master/lua/onedark/colors.lua
-set $c0		#1f2329
-set $c1		#e55561
-set $c2  	#8ebd6b
-set $c3 	#e2b86b
-set $c4   	#4fa6ed
-set $c5 	#bf68d9
-set $c6		#48b0bd
-set $c15	#a0a8b7
-
+set $c0		#1c1e26
+set $c1		#f43e5c
+set $c2  	#27d796
+set $c3 	#f09383
+set $c4   	#848c9a
+set $c5 	#b877db
+set $c6		#6c6f93
+set $c15	#8689a6
+set $c9     #e95379
 # class                 border  backgr. text    indicator   child_border
-client.focused 			$c4     $c0     $c4     $c5         $c4
-client.focused_inactive	$c4     $c0     $c4     $c5         $c0
+client.focused 			$c1     $c0     $c1     $c2         $c1
+client.focused_inactive	$c9     $c0     $c1     $c5         $c0
 client.unfocused		$c0     $c0     $c15    $c5         $c0
-client.urgent			$c1     $c1     $c0     $c1         $c1
+client.urgent			$c2     $c0     $c1     $c2         $c2
 client.placeholder
 
 # Align window title to centre of titlebar

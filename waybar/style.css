@@ -16,7 +16,7 @@
 	}
 
 	to {
-		color: @orange;
+		color: @yellow;
 		background-color: @bg;
 	}
 }
@@ -27,7 +27,7 @@
 	}
 
 	to {
-		color: @red;
+		color: @red_l;
 		background-color: @bg;
 	}
 }
@@ -74,7 +74,7 @@
 @define-color time #ebdbb2;
 */
 
-/* Onedark Darker */
+/* Onedark Darker
 @define-color fg #a0a8b7;
 @define-color black #0e1013;
 @define-color bg0 #1f2329;
@@ -94,6 +94,25 @@
 @define-color cyan #48b0bd;
 @define-color purple #bf68d9;
 @define-color dark_purple #7e3992;
+*/
+
+/* Arc-Horizon */
+@define-color fg #dddddd;
+@define-color bg0 #1c1e26;
+@define-color bg1 #2c2e36;
+@define-color red #e55561;
+@define-color red_l #e95379;
+@define-color green #27d796;
+@define-color green_l #09f7a0;
+@define-color yellow #f09383;
+@define-color yellow_l #fac29a;
+@define-color blue #848c9a;
+@define-color blue_l #a1abbc;
+@define-color purple #b877db;
+@define-color purple_l #d1a8e8;
+@define-color teal #6c6f93;
+@define-color teal_l #8689a6;
+@define-color white_l #ffffff;
 
 /* Reset all styles */
 * {
@@ -106,10 +125,10 @@
 
 /* The whole bar */
 #waybar {
-	background: @bg_d;
-	color: @fg;
+	background: @bg0;
+	color: @red;
 	font-family: Terminus, Siji;
-	font-size: 10pt;
+	font-size: 10.5pt;
 	/*font-weight: bold;*/
 }
 
@@ -147,7 +166,7 @@
 #memory.critical,
 #cpu.critical,
 #battery.critical {
-	color: @red;
+	color: @red_l;
 }
 
 /* Each critical that should blink */
@@ -163,7 +182,7 @@
 #memory.warning,
 #cpu.warning,
 #battery.warning {
-	color: @orange;
+	color: @yellow;
 }
 
 /* Each warning that should blink */
@@ -174,13 +193,13 @@
 
 
 #mode { /* Shown current Sway mode (resize etc.) */
-	color: @red;
+	color: @purple;
 	background: @bg0;
 }
 
 #idle_inhibitor {
 	padding-left: 4px;
-	color: @purple;
+	color: @red;
 	background: @bg0;
 }
 
@@ -189,7 +208,7 @@
 	/*font-weight: bold;*/
 	padding-left: 4px;
 	padding-right: 4px;
-	color: @purple;
+	color: @red;
 	background: @bg0;
 }
 
@@ -206,8 +225,8 @@
 #custom-alsa,
 #pulseaudio,
 #sndio {
-	background: @bg0;
-	color: @green;
+    background: @bg0;
+    color: @red;
 }
 
 #custom-getplayerctl {
@@ -216,8 +235,8 @@
 }
 
 #network {
-	background: @bg0;
-	color: @yellow;
+    background: @bg0;
+	color: @red;
 }
 
 #memory {
@@ -227,35 +246,35 @@
 
 #cpu {
 	background: @bg0;
-	color: @blue;
+	color: @red;
 }
 
 #custom-gpu {
 	background: @bg0;
-	color: @cyan;
+	color: @red;
 }
 
 #language {
 	background: @bg0;
-	color: @yellow;
+	color: @red;
 }
 
 #battery {
-	background: @bg1;
-	color: @fg;
+	background: @bg0;
+	color: @red;
 }
 
 #tray {
-	background: @bg1;
+	background: @bg0;
 }
 
 #clock.date {
-	background: @bg1;
+	background: @bg0;
 	color: @fg;
 }
 
 #clock.time {
-	background: @bg2;
+	background: @bg0;
 	color: @fg;
 }
 
@@ -271,60 +290,60 @@
 
 #custom-arrow2 {
 	font-size: 16px;
-	color: @green;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow3 {
 	font-size: 16px;
-	color: @green;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow4 {
 	font-size: 16px;
-	color: @red;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow5 {
 	font-size: 16px;
-	color: @blue;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow6 {
 	font-size: 16px;
-	color: @cyan;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow7 {
 	font-size: 16px;
-	color: @yellow;
+	color: @fg;
 	background: @bg0;
 }
 
 #custom-arrow8 {
 	font-size: 16px;
-	color: @bg1;
+	color: @bg0;
 	background: @bg0;
 }
 
 #custom-arrow9 {
 	font-size: 16px;
-	color: @bg2;
-	background: @bg1;
+	color: @bg0;
+	background: @bg0;
 }
 
 #custom-arrow10 {
 	font-size: 16px;
-	color: @bg2;
-	background: @bg1;
+	color: @bg0;
+	background: @bg0;
 }
 
 #custom-arrow11 {
 	font-size: 16px;
 	color: @bg0;
-	background: @bg_d;
+	background: @bg0;
 }

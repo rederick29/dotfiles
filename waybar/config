@@ -44,13 +44,13 @@
 		"custom/arrow6",
 		"custom/gpu",
 		"custom/arrow7",
-		"sway/language",
+		//"sway/language",
 		"custom/arrow8",
 		//"battery",
 		//"custom/arrow9",
 		"tray",
 		"clock#date",
-		"custom/arrow10",
+		//"custom/arrow10",
 		"clock#time"
 	],
 
