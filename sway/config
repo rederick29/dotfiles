@@ -27,6 +27,7 @@ set $term kitty
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
 for_window [app_id="ulauncher"] floating enable, border none
+for_window [class="Steam"] floating enable
 
 
 # Scripts
@@ -103,6 +104,10 @@ input "type:pointer" {
 
     # Start your launcher
     bindsym $mod+d exec $menu
+
+    # Use hardware keys to increase/decrease volume
+    bindsym XF86AudioRaiseVolume exec pamixer -i 2
+    bindsym XF86AudioLowerVolume exec pamixer -d 2
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
