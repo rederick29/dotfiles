@@ -108,8 +108,8 @@
 #waybar {
 	background: @bg_d;
 	color: @fg;
-	font-family: Terminus, Siji;
-	font-size: 10pt;
+	font-family: JetBrainsMono NF;
+	font-size: 10.2pt;
 	/*font-weight: bold;*/
 }
 

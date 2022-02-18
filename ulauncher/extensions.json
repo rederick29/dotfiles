@@ -1,30 +1,9 @@
 {
-    "com.github.tchar.ulauncher-albert-calculate-anything": {
-        "id": "com.github.tchar.ulauncher-albert-calculate-anything",
-        "url": "https://github.com/tchar/ulauncher-albert-calculate-anything",
-        "updated_at": "2021-11-07T22:14:11.466122",
-        "last_commit": "ee0903174c8b87cd1f7c3b6c1acef10702547507",
-        "last_commit_time": "2021-08-12T06:39:56"
-    },
-    "com.github.ikorjefocur.ulauncher-commandrunner": {
-        "id": "com.github.ikorjefocur.ulauncher-commandrunner",
-        "url": "https://github.com/IkorJefocur/ulauncher-commandrunner",
-        "updated_at": "2021-11-07T22:14:15.136368",
-        "last_commit": "dfd7bc08ac4764612ce50d2d26a665db7d975be6",
-        "last_commit_time": "2021-10-31T14:33:55"
-    },
-    "com.github.isacikgoz.ukill": {
-        "id": "com.github.isacikgoz.ukill",
-        "url": "https://github.com/isacikgoz/ukill",
-        "updated_at": "2021-11-07T22:14:21.643433",
-        "last_commit": "bc50d9f41d46b6813a5aeebddd15734dcdb9d8db",
-        "last_commit_time": "2019-05-28T18:30:00"
-    },
-    "com.github.fajtak.ulauncher-weather": {
-        "id": "com.github.fajtak.ulauncher-weather",
-        "url": "https://github.com/fajtak/ulauncher-weather",
-        "updated_at": "2021-11-07T22:16:45.121936",
-        "last_commit": "d87a90a318646bdf81efa1a71392f300f45f8d5b",
-        "last_commit_time": "2021-08-12T08:03:26"
+    "com.github.iboyperson.ulauncher-system": {
+        "id": "com.github.iboyperson.ulauncher-system",
+        "url": "https://github.com/iboyperson/ulauncher-system",
+        "updated_at": "2022-01-30T10:46:13.436611",
+        "last_commit": "667613bf7bb6b4affa4f2121b58589477cd89829",
+        "last_commit_time": "2021-11-08T18:16:55"
     }
 }

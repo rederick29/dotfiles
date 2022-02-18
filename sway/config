@@ -43,11 +43,14 @@ xwayland enable
 
 # Wallpaper
 output * bg /home/erickv/Pictures/wallpaper.png fill
+#output * bg /home/erickv/Downloads/external-content.duckduckgo.com.png fill
 #output HDMI-A-2 bg /home/erickv/Downloads/wall_secondary.png fill
 
 # Set refresh and pos
-output DP-1 mode 1920x1080@144Hz position 0,0
-output HDMI-A-2 position 1920,0
+output DP-2 mode 1920x1080@144Hz position 1920,0
+output HDMI-A-2 position 0,0
+workspace 1 output DP-2
+workspace 2 output HDMI-A-2
 
 # VRR
 output * adaptive_sync on
