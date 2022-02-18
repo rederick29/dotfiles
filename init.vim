@@ -92,6 +92,8 @@ set expandtab
 set autoindent
 set cpoptions+=I
 set smartindent
+" Modeline checking
+set modeline
 set modelines=2
 set encoding=utf-8
 
@@ -108,9 +110,11 @@ set signcolumn=yes
 " ==============
 " Onedark Theme:
 " ==============
-let g:onedark_italic_comments = v:true
-let g:onedark_hide_ending_tildes = v:true
-let g:onedark_style = 'darker'
+lua << EOF
+require('onedark').setup {
+    style = 'darker',
+}
+EOF
 colorscheme onedark
 
 " ========
@@ -177,8 +181,7 @@ EOF
 " ========================
 " Nvim tree configuration
 " ========================
-let g:nvim_tree_gitignore = 1 "0 by default
-let g:nvim_tree_quit_on_open = 1 "0 by default, closes the tree when you open a file
+let g:nvim_tree_quit_on_open = 0 "0 by default, closes the tree when you open a file
 let g:nvim_tree_indent_markers = 1 "0 by default, this option shows indent markers when folders are open
 let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
 let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
