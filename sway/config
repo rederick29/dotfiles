@@ -26,7 +26,10 @@ set $term kitty
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
+
+# App launcher
 for_window [app_id="ulauncher"] floating enable, border none
+# Steam doesn't really play nice with tiling wm so make it floating
 for_window [class="Steam"] floating enable
 
 
@@ -82,7 +85,7 @@ exec swayidle -w \
 
 # UK keyboard
 input "type:keyboard" {
-	xkb_layout custom
+	xkb_layout gb
 	xkb_model "pc104"
 }
 
