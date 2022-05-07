@@ -4,7 +4,7 @@ Colour schemes I use: (and whether I'm still updating them)
 <table>
   <tr>
     <td>Arc-Horizon</td>
-    <td>WIP</td>
+    <td>unmaintained</td>
   </tr>
   <tr>
     <td>Onedark Darker</td>
