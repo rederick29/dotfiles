@@ -268,9 +268,12 @@ bindsym $mod+r mode "resize"
 #}
 
 bar {
-	swaybar_command waybar
+    swaybar_command waybar
+    position top
+    hidden_state show
+    mode dock
+    modifier none
 }
-
 
 ## Title bars, focusing, etc
 
