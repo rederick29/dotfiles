@@ -1,12 +1,14 @@
 call plug#begin('~/.config/nvim/plugged')
 
-" Airline and themes
+" Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'navarasu/onedark.nvim'
 
 " Non-lsp syntax highlight and more
 Plug 'sheerun/vim-polyglot'
+
+" Onedark theme
+Plug 'navarasu/onedark.nvim'
 
 " Tree sitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " Update parsers on update
@@ -37,7 +39,7 @@ Plug 'akinsho/toggleterm.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 
 " LaTex
-Plug 'vim-latex/vim-latex'
+" Plug 'vim-latex/vim-latex'
 
 call plug#end()
 
@@ -339,3 +341,4 @@ local list = {
   { key = {"<CR>", "o" }, cb = tree_cb("edit") },
 }
 EOF
+
