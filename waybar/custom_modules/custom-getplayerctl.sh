@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #Ignoring chromium in order to ignore discord. I use firefox as a browser.
-playing_title=$(playerctl metadata --ignore-player=chromium --format "{{ title }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;amp;/g")
-playing_artist=$(playerctl metadata --ignore-player=chromium --format "{{ artist }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;amp;/g")
-playing_album=$(playerctl metadata --ignore-player=chromium --format "{{ album }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;amp;/g")
+playing_title=$(playerctl metadata --ignore-player=chromium --format "{{ title }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;/g")
+playing_artist=$(playerctl metadata --ignore-player=chromium --format "{{ artist }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;/g")
+playing_album=$(playerctl metadata --ignore-player=chromium --format "{{ album }}" | sed -e 's/\"/\\"/g' -e "s/\&/\&amp;/g")
 
 status=$(playerctl metadata --format "{{ uc(status) }}")
 
