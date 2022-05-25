@@ -108,11 +108,13 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ls="exa -hl --color=always"
 alias cat="bat"
-alias cp="rsync -avzh --progress"
+#alias cp="rsync -avzh --progress"
+alias cp="cp --reflink=auto"
 alias icat="kitty +kitten icat"
 
 export EDITOR=nvim
 export PATH=/home/erickv/.cargo/bin:$PATH
+export GPG_TTY=$(tty)
 
 chpwd() ls
 
