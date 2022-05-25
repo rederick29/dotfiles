@@ -10,9 +10,6 @@ Plug 'sheerun/vim-polyglot'
 " Onedark theme
 Plug 'navarasu/onedark.nvim'
 
-" Tree sitter
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " Update parsers on update
-
 " File explorer-like tree
 Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
@@ -161,24 +158,6 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ' '
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty='⚡'
-
-" =============
-" TreeSitter:
-" =============
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-    highlight = {
-    enable = true,
-        disable = { "vim", "rust" },
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = true,
-    },
-}
-EOF
 
 " ========================
 " Nvim tree configuration
