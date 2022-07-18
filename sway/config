@@ -4,16 +4,10 @@
 #
 # Read `man 5 sway` for a complete reference.
 
-# Start notification daemon
-exec mako
-
-# Update env
+# Startup
 exec dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-
-# Start application launcher
+exec mako
 exec ulauncher
-
-# Start pipewire
 exec pipewire
 exec pipewire-pulse
 
@@ -58,7 +52,7 @@ set $slurp ~/.config/sway/scripts/slurp.sh
 xwayland enable
 
 # Wallpaper
-output * bg /home/erickv/Others/Wallpapers/76188900_p0.jpg fill
+output * bg /home/erickv/Others/Wallpapers/98616585_p0.png fill
 
 # Set refresh and pos
 output DP-2 mode 1920x1080@144Hz position 1920,0
