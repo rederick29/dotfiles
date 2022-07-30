@@ -25,6 +25,7 @@ filetype plugin on
 syntax on
 autocmd BufWritePre * :%s/\s\+$//e
 set hidden
+set signcolumn=no
 
 " Terminal:
 tnoremap <Esc> <C-\><C-n>
@@ -78,6 +79,10 @@ lua << EOF
 require('lualine').setup {
     options = {
         theme = 'onedark'
+    },
+    extensions = {
+        'nvim-tree',
+        'toggleterm'
     }
 }
 EOF
@@ -99,25 +104,27 @@ EOF
 nmap <C-n> <Cmd>NvimTreeToggle<CR>
 
 " Completion:
-let g:coq_settings = { 'auto_start': v:true }
-let g:coq_settings = { 'display.icons.mode': 'none' }
+let g:coq_settings = { 'auto_start': 'shut-up', 'display.icons.mode': 'none', 'display.preview.border': 'single'}
+
+" this is for syntax highlighting in the preview window of COQ
+autocmd Syntax markdown set ft=markdown
 
 " Rust:
 lua << EOF
-require('rust-tools').setup({})
 require'lspconfig'.rust_analyzer.setup(require"coq".lsp_ensure_capabilities())
+require('rust-tools').setup({})
 EOF
 
 " Clangd:
 lua << EOF
-require("clangd_extensions").setup({})
 require'lspconfig'.clangd.setup(require"coq".lsp_ensure_capabilities())
+require("clangd_extensions").setup({})
 EOF
 
 " Treesitter:
 lua << EOF
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = { "c", "cpp", "rust" },
+    ensure_installed = { "c", "cpp", "rust", "markdown", "markdown_inline" },
     highlight = {
         enable = true,
         adittional_vim_regex_highlighting = false
