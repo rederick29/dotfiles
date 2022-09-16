@@ -1,7 +1,7 @@
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'navarasu/onedark.nvim'
-Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
+Plug 'akinsho/toggleterm.nvim', {'tag': 'v2.*'}
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
@@ -11,8 +11,10 @@ Plug 'p00f/clangd_extensions.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq', 'do': ':COQdeps'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'windwp/nvim-autopairs'
+Plug 'p00f/nvim-ts-rainbow'
 
 call plug#end()
 
@@ -59,7 +61,6 @@ set softtabstop=-1
 set shiftwidth=0
 set shiftround
 set expandtab
-set autoindent
 set cpoptions+=I
 set smartindent
 
@@ -104,30 +105,111 @@ EOF
 nmap <C-n> <Cmd>NvimTreeToggle<CR>
 
 " Completion:
-let g:coq_settings = { 'auto_start': 'shut-up', 'display.icons.mode': 'none', 'display.preview.border': 'single'}
+let g:coq_settings = { 'auto_start': 'shut-up', 'display.icons.mode': 'none', 'display.preview.border': 'single', 'keymap.recommended': v:false }
 
 " this is for syntax highlighting in the preview window of COQ
 autocmd Syntax markdown set ft=markdown
 
-" Rust:
+" LSP:
 lua << EOF
-require'lspconfig'.rust_analyzer.setup(require"coq".lsp_ensure_capabilities())
-require('rust-tools').setup({})
-EOF
-
-" Clangd:
-lua << EOF
-require'lspconfig'.clangd.setup(require"coq".lsp_ensure_capabilities())
+local coq = require('coq')
+local opts = {
+    server = {
+        settings = {
+            ["rust-analyzer"] = {
+                diagnostics = {
+                   enable = true,
+                   disabled = {"unresolved-proc-macro"},
+                   enableExperimental = true,
+                },
+                assist = {
+                    importEnforceGranularity = true,
+                    importPrefix = "crate"
+                },
+                cargo = {
+                    allFeatures = true,
+                    loadOutDirsFromCheck = true,
+                    buildScripts = {
+                        enable = true
+                    }
+                },
+                checkOnSave = {
+                    command = "clippy"
+                },
+                procMacro = {
+                    enable = true,
+                    attributes = {
+                        enable = true
+                    }
+                },
+            }
+        }
+    }
+}
+require('rust-tools').setup(coq.lsp_ensure_capabilities(opts))
+require('lspconfig').clangd.setup(coq.lsp_ensure_capabilities())
 require("clangd_extensions").setup({})
 EOF
 
-" Treesitter:
+" Code navigation shortcuts -- mostly from sharksforarms
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+" nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> gb    <cmd>lua vim.diagnostic.open_float(nil, { focusable = false })<CR>
+nnoremap <silent> g[    <cmd>lua vim.diagnostic.goto_prev()<CR>
+nnoremap <silent> g]    <cmd>lua vim.diagnostic.goto_next()<CR>
+
+" Treesitter + Brackets:
 lua << EOF
+local remap = vim.api.nvim_set_keymap
+local npairs = require('nvim-autopairs')
+
 require'nvim-treesitter.configs'.setup {
     ensure_installed = { "c", "cpp", "rust", "markdown", "markdown_inline" },
     highlight = {
         enable = true,
         adittional_vim_regex_highlighting = false
+    },
+    rainbow = {
+        enable = true,
     }
 }
+
+npairs.setup({ map_bs = false, map_cr = false })
+
+remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
+remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
+remap('i', '<tab>', [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
+remap('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
+
+_G.MUtils= {}
+
+MUtils.CR = function()
+    if vim.fn.pumvisible() ~= 0 then
+        if vim.fn.complete_info({ 'selected' }).selected ~= -1 then
+            return npairs.esc('<c-y>')
+        else
+            return npairs.esc('<c-e>') .. npairs.autopairs_cr()
+        end
+    else
+        return npairs.autopairs_cr()
+    end
+end
+remap('i', '<cr>', 'v:lua.MUtils.CR()', { expr = true, noremap = true })
+
+MUtils.BS = function()
+    if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ 'mode' }).mode == 'eval' then
+        return npairs.esc('<c-e>') .. npairs.autopairs_bs()
+    else
+        return npairs.autopairs_bs()
+    end
+end
+remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
 EOF
