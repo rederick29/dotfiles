@@ -1,3 +1,24 @@
+# check if tty
+if [[ "$TERM" = "linux" ]]; then
+  # taken from a SO answer and modified colorscheme
+  echo -en "\e]P01F2329" #bg
+  echo -en "\e]P8535965" #grey
+  echo -en "\e]P18B3434" #red
+  echo -en "\e]P9E55561" #brightred
+  echo -en "\e]P283BD6B" #green
+  echo -en "\e]PA8EDB7D" #brightgreen
+  echo -en "\e]P3CC9057" #yellow
+  echo -en "\e]PBC2B86B" #brightyellow
+  echo -en "\e]P44FA6ED" #blue
+  echo -en "\e]PC61AFEF" #brightblue
+  echo -en "\e]P57E3992" #magenta
+  echo -en "\e]PDBF68D9" #brightmagenta
+  echo -en "\e]P6266269" #cyan
+  echo -en "\e]PE48B0BD" #brightcyan
+  echo -en "\e]P7A0A8B7" #lightgrey
+  echo -en "\e]PFFFFFFF" #white
+  clear #for background artifacting
+else
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -98,11 +119,15 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
+fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -110,13 +135,9 @@ alias ls="exa -hl --color=always"
 alias cat="bat"
 #alias cp="rsync -avzh --progress"
 alias cp="cp --reflink=auto"
-alias icat="kitty +kitten icat"
 
 export EDITOR=nvim
-export PATH=/home/erickv/.cargo/bin:$PATH
+export PATH=/home/erickv/.local/bin:/home/erickv/.cargo/bin:$PATH
 export GPG_TTY=$(tty)
 
 chpwd() ls
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
