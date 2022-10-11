@@ -7,6 +7,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'neovim/nvim-lspconfig'
 Plug 'simrat39/rust-tools.nvim'
+Plug 'saecki/crates.nvim'
 Plug 'p00f/clangd_extensions.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/plenary.nvim'
@@ -28,6 +29,7 @@ syntax on
 autocmd BufWritePre * :%s/\s\+$//e
 set hidden
 set signcolumn=no
+" set mouse=a
 
 " Terminal:
 tnoremap <Esc> <C-\><C-n>
@@ -110,11 +112,34 @@ let g:coq_settings = { 'auto_start': 'shut-up', 'display.icons.mode': 'none', 'd
 " this is for syntax highlighting in the preview window of COQ
 autocmd Syntax markdown set ft=markdown
 
+let g:rustfmt_autosave = 1
+
 " LSP:
-lua << EOF
+lua <<EOF
+local on_attach = function(client, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', 'gb', vim.diagnostic.open_float, bufopts)
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
+end
+
 local coq = require('coq')
-local opts = {
+local rust_opts = {
     server = {
+        on_attach = on_attach,
         settings = {
             ["rust-analyzer"] = {
                 diagnostics = {
@@ -146,27 +171,49 @@ local opts = {
         }
     }
 }
-require('rust-tools').setup(coq.lsp_ensure_capabilities(opts))
-require('lspconfig').clangd.setup(coq.lsp_ensure_capabilities())
-require("clangd_extensions").setup({})
+
+local c_opts = {
+    on_attach = on_attach,
+    cmd = {
+        "clangd",
+        "--background-index",
+        "--cross-file-rename",
+        "--pch-storage=memory",
+        "--clang-tidy",
+        "--pretty",
+        "--all-scopes-completion",
+        "--header-insertion=never",
+        "-j=4",
+        "--header-insertion-decorators",
+    },
+    filetypes = {"c", "cpp", "objc", "objcpp", "cuda", "proto"}
+}
+
+require('rust-tools').setup(coq.lsp_ensure_capabilities(rust_opts))
+require('lspconfig').clangd.setup(coq.lsp_ensure_capabilities(c_opts))
+
+require('crates').setup {
+    src = {
+        coq = {
+            enabled = true,
+            name = "crates.nvim",
+        },
+    },
+}
 EOF
 
 " Code navigation shortcuts -- mostly from sharksforarms
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
-" nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
 nnoremap <silent> gb    <cmd>lua vim.diagnostic.open_float(nil, { focusable = false })<CR>
 nnoremap <silent> g[    <cmd>lua vim.diagnostic.goto_prev()<CR>
 nnoremap <silent> g]    <cmd>lua vim.diagnostic.goto_next()<CR>
 
 " Treesitter + Brackets:
+hi rainbowcol1 guifg=#a0a8b7
 lua << EOF
 local remap = vim.api.nvim_set_keymap
 local npairs = require('nvim-autopairs')
