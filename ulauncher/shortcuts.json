@@ -3,8 +3,8 @@
         "id": "3f88f9c2-1569-492c-bf04-88d20f59910c",
         "name": "DuckDuckGo",
         "keyword": "d",
-        "cmd": "https://duckduckgo.com/?q=%s",
-        "icon": null,
+        "cmd": "https://www.duckduckgo.com/?q=%s",
+        "icon": "~/Pictures/duckduckgo-3-logo-png-transparent.png",
         "is_default_search": true,
         "run_without_argument": false,
         "added": 1643539371.858208
