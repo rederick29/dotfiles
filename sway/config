@@ -6,10 +6,10 @@
 
 # Startup
 exec dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec dbus-launch --exit-with-session pipewire & pipewire-pulse & wireplumber
 exec mako
+exec foot -s
 exec ulauncher
-exec pipewire
-exec pipewire-pulse
 
 ### Variables
 
@@ -23,7 +23,7 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term foot
+set $term footclient
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -38,7 +38,6 @@ for_window [class="Steam"] floating enable
 
 for_window [app_id="zoom"] floating enable
 for_window [class="zoom "] floating enable
-
 
 # Scripts
 set $grim ~/.config/sway/scripts/grim.sh
