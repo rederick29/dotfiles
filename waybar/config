@@ -23,7 +23,6 @@
 		"idle_inhibitor",
 		"sway/workspaces",
 		"custom/arrow11",
-		//"custom/getplayerctl"
 		"sway/window"
 	],
 
@@ -34,10 +33,10 @@
 	"modules-right": [
 		"custom/arrow1",
 		//"custom/alsa",
-        "custom/getplayerctl",
+        "custom/mpris",
 		//"sndio",
 		"custom/arrow2",
-        "pulseaudio",
+        "custom/wireplumber",
 		//"custom/arrow3",
 		//"network",
 		"custom/arrow4",
@@ -181,6 +180,17 @@
 		"on-click": "pavucontrol"
 	},
 
+    "custom/wireplumber": {
+        "exec": "$HOME/.config/waybar/custom_modules/custom-wireplumber.sh",
+        "tooltip": false,
+        "signal": 8,
+        "restart-interval": 0,
+        "on-click": "pavucontrol",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
+        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
 	"custom/gpu": {
 		"exec": "$HOME/.config/waybar/custom_modules/custom-gpu.sh",
 		"return-type": "json",
@@ -191,15 +201,17 @@
 		//"min-length": 19,
 	},
 
-	"custom/getplayerctl": {
-		"exec": "$HOME/.config/waybar/custom_modules/custom-getplayerctl.sh",
-		"return-type": "json",
-		"format": "{}",
+	"custom/mpris": {
+        "exec": "playerctl --ignore-player=chromium -a metadata --format '{\"text\": \"{{markup_escape(title)}}\", \"tooltip\": \"Title: {{markup_escape(title)}}\\nArtist: {{artist}}\\nAlbum: {{album}}\\nPlayer: {{playerName}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+		"format": "{icon}{}",
+        "return-type": "json",
+        "format-icons": {
+            "Playing": " ",
+            "Paused": " ",
+        },
 		"on-click": "playerctl --ignore-player=chromium play-pause",
 		"on-scroll-up": "playerctl --ignore-player=chromium next",
 		"on-scroll-down": "playerctl previous",
-		"interval": 5,
-		"tooltip": "{tooltip}",
 		"max-length": 25
 	},
 
@@ -212,14 +224,6 @@
 		"interval": 10,
 		"tooltip": false
 	},
-
-  	//"custom/waybar-mpris": {
-    //	"return-type": "json",
-    //	"exec": "waybar-mpris --position --autofocus --order \"SYMBOL:TITLE:ARTIST\"",
-   	//	"on-click": "waybar-mpris --send toggle",
-    //	"max-length": 25,
-    //	"escape": true
-  	//},
 
 	"sndio": {
 		"format": " {}%"

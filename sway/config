@@ -115,11 +115,10 @@ input "type:pointer" {
     # Start your launcher
     bindsym $mod+d exec $menu
 
-    # Use hardware keys to increase/decrease volume
-    bindsym XF86AudioRaiseVolume exec pamixer -i 2
-    bindsym XF86AudioLowerVolume exec pamixer -d 2
-
     # Media Keys
+    bindsym XF86AudioRaiseVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"
+    bindsym XF86AudioLowerVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+    bindsym XF86AudioMute exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     bindsym XF86AudioPlay exec playerctl play-pause
     bindsym XF86AudioPrev exec playerctl previous
     bindsym XF86AudioNext exec playerctl next
