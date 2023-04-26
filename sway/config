@@ -11,6 +11,9 @@ exec mako
 exec foot -s
 exec ulauncher
 
+# make first xwayland dispaly the primary one
+exec_always xrandr --output $(xrandr | grep -m 1 XWAYLAND | awk '{print $1;}') --primary
+
 ### Variables
 
 # Logo key. Use Mod1 for Alt.
@@ -35,9 +38,26 @@ set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
 for_window [app_id="ulauncher"] floating enable, border none
 # Steam doesn't really play nice with tiling wm so make it floating
 for_window [class="Steam"] floating enable
-
+for_window [class="steamwebhelper"] floating enable
+# Zoom crashes if its tiling by default (?)
 for_window [app_id="zoom"] floating enable
 for_window [class="zoom "] floating enable
+# Append xwayland to window title
+for_window [shell="xwayland"] title_format "%title (%shell)"
+
+# Waydroid multi-window
+#for_window [app_id="waydroid*"] floating enable
+
+# https://grtcdr.tn/posts/2022-12-16.html
+for_window [title="Picture-in-Picture"] {
+    floating enable
+    resize set height 280
+    resize set width  500
+    border none
+    sticky toggle
+    move position 1420 800
+    opacity 0.75
+}
 
 # Scripts
 set $grim ~/.config/sway/scripts/grim.sh
@@ -54,13 +74,17 @@ xwayland enable
 output * bg /home/erickv/Others/Wallpapers/98616585_p0.png fill
 
 # Set refresh and pos
-output DP-2 mode 1920x1080@144Hz position 1920,0
-output HDMI-A-2 mode 1920x1080@72Hz position 0,0
-workspace 1 output DP-2
-workspace 2 output HDMI-A-2
+output DP-3 mode 1920x1080@144Hz position 1920,0
+output HDMI-A-3 mode 1920x1080@72Hz position 0,0
+workspace 1 output DP-3
+workspace 2 output HDMI-A-3
+
+# This is the same monitor as DP-3 but connected to dGPU for VM passthrough
+output HDMI-A-1 disable
 
 # VRR
-output * adaptive_sync on
+output DP-3 adaptive_sync on
+output HDMI-A-3 adaptive_sync off
 
 ### Idle configuration
 exec swayidle -w \
@@ -96,6 +120,10 @@ input "type:keyboard" {
 input "type:pointer" {
 	accel_profile flat
 	pointer_accel 0.0
+}
+
+input "1386:890:Wacom_One_by_Wacom_S_Pen" {
+    map_to_output DP-3
 }
 
 ### Key bindings

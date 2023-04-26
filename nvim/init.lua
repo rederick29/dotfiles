@@ -3,7 +3,17 @@ require("plugins")
 
 --- Theming
 require('onedark').setup {
-  style = 'darker'
+  style = 'darker',
+  highlights = {
+    ["@lsp.type.variable.rust"] = { fg = '#a0a8b7' },
+    ["@lsp.typemod.variable.constant.rust"] = { fg = '#cc9057' },
+    ["@lsp.type.property.rust"] = { fg = '#48b0bd' },
+    ["@lsp.type.parameter.rust"] = { fg = '#a0a8b7' },
+    ["@lsp.typemod.parameter.declaration.rust"] = { fg = '#e55561' },
+    ["@lsp.typemod.method.mutable.rust"] = { fmt = 'underline' },
+    ["@lsp.mod.deprecated.rust"] = { fmt = 'strikethrough' },
+    ["@lsp.mod.async"] = { fmt = 'italic' }
+  }
 }
 require('onedark').load()
 

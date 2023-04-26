@@ -44,11 +44,12 @@
 		"memory",
 		"custom/arrow5",
 		"cpu",
-		"custom/arrow6",
-		"custom/gpu",
+		//"custom/arrow6",
+		//"custom/gpu",
 		"custom/arrow7",
-		"sway/language",
-		"custom/arrow8",
+		//"sway/language",
+		"network",
+        "custom/arrow8",
 		//"battery",
 		//"custom/arrow9",
 		"tray",
@@ -127,13 +128,12 @@
 
 	"network": {
 		"interval": 5,
-		// TODO: format-icons
 		"format-wifi": "︁ {essid} ({signalStrength}%)", // Icon: wifi
 		//"format-ethernet": " {ifname}: {ipaddr}/{cidr}", // Icon: ethernet
-		"format-ethernet": " {ifname}",
+		"format-ethernet": "󰇚 {bandwidthTotalBytes}",
 		"format-disconnected": "×︁",
-		//"tooltip-format": "{ifname}: {ipaddr}",
-		"tooltip": false
+		"tooltip-format": "{ifname}: {ipaddr} ({essid}, {signalStrength})",
+		"tooltip": true
 		//"on-click": "cmst"
 	},
 

@@ -1,8 +1,16 @@
 -- vim: ts=2 sts=2 et
 require("packer").startup(function(use)
   use "wbthomason/packer.nvim"
-  use "neovim/nvim-lspconfig"
   use "navarasu/onedark.nvim"
+
+  use {
+    "neovim/nvim-lspconfig",
+    config = function()
+      -- Python LSP
+      require'lspconfig'.pylsp.setup{}
+      vim.diagnostic.config({ signs = false })
+    end
+  }
 
   use {
     "nvim-lualine/lualine.nvim",
@@ -17,6 +25,13 @@ require("packer").startup(function(use)
           "toggleterm"
         }
       }
+    end
+  }
+
+  use {
+    "lewis6991/gitsigns.nvim",
+    config = function()
+      require("gitsigns").setup()
     end
   }
 
@@ -50,7 +65,7 @@ require("packer").startup(function(use)
             ["rust-analyzer"] = {
               diagnostics = {
                 enable = true,
-                disabled = {"unresolved-proc-macro"},
+               -- disabled = {"unresolved-proc-macro"},
                 enableExperimental = true,
               },
               assist = {
@@ -103,7 +118,7 @@ require("packer").startup(function(use)
     ft = {"cpp", "c", "objc", "objcpp", "cuda", "proto"},
     config = function()
       local coq = require("coq")
-      require("clangd_extensions").setup(coq.lsp_ensure_capabilities()) 
+      require("clangd_extensions").setup(coq.lsp_ensure_capabilities())
     end
   }
 
@@ -184,7 +199,7 @@ require("packer").startup(function(use)
 
       vim.cmd("hi rainbowcol1 guifg=#a0a8b7")
 
-      -- This has been copy pasted from somewhere online to make it work with code completion 
+      -- This has been copy pasted from somewhere online to make it work with code completion
       local remap = vim.api.nvim_set_keymap
       remap('i', '<esc>', [[pumvisible() ? "<c-e><esc>" : "<esc>"]], { expr = true, noremap = true })
       remap('i', '<c-c>', [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]], { expr = true, noremap = true })
