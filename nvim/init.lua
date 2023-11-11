@@ -1,21 +1,18 @@
--- vim: ts=2 sts=2 et
-require("plugins")
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
---- Theming
-require('onedark').setup {
-  style = 'darker',
-  highlights = {
-    ["@lsp.type.variable.rust"] = { fg = '#a0a8b7' },
-    ["@lsp.typemod.variable.constant.rust"] = { fg = '#cc9057' },
-    ["@lsp.type.property.rust"] = { fg = '#48b0bd' },
-    ["@lsp.type.parameter.rust"] = { fg = '#a0a8b7' },
-    ["@lsp.typemod.parameter.declaration.rust"] = { fg = '#e55561' },
-    ["@lsp.typemod.method.mutable.rust"] = { fmt = 'underline' },
-    ["@lsp.mod.deprecated.rust"] = { fmt = 'strikethrough' },
-    ["@lsp.mod.async"] = { fmt = 'italic' }
-  }
-}
-require('onedark').load()
+require('lazy').setup('plugins')
+require('colorizer').setup()
 
 --- General Options
 -- Numberline where current line is always 0
@@ -26,38 +23,14 @@ vim.opt.termguicolors = true
 vim.opt.clipboard = "unnamedplus"
 -- Characters to use when explicitly showing whitespace
 vim.opt.listchars = "eol:$,tab:>-,trail:~,extends:>,precedes:<,space:·"
--- Remove all trailing whitespace before saving files
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = '*',
-  command = [[:%s/\s\+$//e]]
-})
--- Required by toggleterm for toggling multiple windows
+-- Required by toggleterm
 vim.opt.hidden = true
 -- Always show the signcolumn
 vim.opt.signcolumn = "yes"
 -- Allow using mouse in visual mode
 vim.opt.mouse = 'v'
-
--- Make coq autostart and change some things
-vim.g.coq_settings = {
-  ["auto_start"] = "shut-up",
-  ["display.icons.mode"] = "none",
-  ["display.preview.border"] = "single",
-  ["keymap.recommended"] = false
-}
-
--- Fix syntax highlighting in coq preview window
-vim.api.nvim_create_autocmd("Syntax", {
-  pattern = "markdown",
-  command = "set ft=markdown"
-})
-
--- Apply LSP keybinds
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = '*',
-  desc = 'Sets custom LSP keybinds',
-  callback = function() set_lsp_keybinds() end
-})
+-- Keep cursor 5 lines away from bottom/top
+vim.opt.scrolloff = 5
 
 --- Indentation
 -- Alwas change tab(s) to spaces
@@ -71,12 +44,15 @@ vim.opt.softtabstop = -1
 -- Do smart autoindenting
 vim.opt.smartindent = true
 
+-- Remove all trailing whitespace before saving files
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = '*',
+  command = [[:%s/\s\+$//e]]
+})
+
 --- Map lsp keybinds in normal mode
 function set_lsp_keybinds()
-  if vim.tbl_isempty(vim.lsp.buf_get_clients()) then
-    return
-  end
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap=true, silent=true, buffer=bufnr}
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -89,3 +65,11 @@ function set_lsp_keybinds()
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
 end
+
+-- Apply LSP keybinds
+vim.api.nvim_create_autocmd("LspAttach", {
+  desc = 'Sets custom LSP keybinds',
+  callback = function() set_lsp_keybinds() end
+})
+
+-- vim: tabstop=2

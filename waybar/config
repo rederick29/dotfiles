@@ -1,89 +1,60 @@
-// -*- mode: json -*- vim: ft=json
-// =============================================================================
-//
-// Waybar configuration (https://hg.sr.ht/~begs/dotfiles)
-//
-// Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
-//
-// =============================================================================
-
 {
-	// -------------------------------------------------------------------------
-	// Global configuration
-	// -------------------------------------------------------------------------
-    "bar_id": "bar-0",
-    "ipc": true,
-
 	"layer": "top",
 	"position": "top",
-	//"height": 18,
 
 	"modules-left": [
 		"sway/mode",
-		"idle_inhibitor",
 		"sway/workspaces",
-		"custom/arrow11",
+		"custom/arrow10",
 		"sway/window"
 	],
 
-	//"modules-center": [
-		//"sway/window"
-	//],
-
 	"modules-right": [
-		"custom/arrow1",
-		//"custom/alsa",
-        "custom/mpris",
-		//"sndio",
-		"custom/arrow2",
-        //"custom/wireplumber",
-        "pulseaudio",
-		//"custom/arrow3",
-		//"network",
-		"custom/arrow4",
-		"memory",
-		"custom/arrow5",
-		"cpu",
-		//"custom/arrow6",
-		//"custom/gpu",
-		"custom/arrow7",
-		//"sway/language",
+		"custom/arrow9",
+		"pulseaudio",
+		"custom/arrow8",
 		"network",
-        "custom/arrow8",
-		//"battery",
-		//"custom/arrow9",
+		"custom/arrow7",
+		"memory",
+		"custom/arrow6",
+		"cpu",
+		"custom/arrow5",
+		"temperature",
+		"custom/arrow4",
+		"battery",
+		"custom/arrow3",
+		"backlight",
+		"custom/arrow2",
 		"tray",
 		"clock#date",
-		"custom/arrow10",
+		"custom/arrow1",
 		"clock#time"
 	],
 
-	// -------------------------------------------------------------------------
 	// Modules
-	// -------------------------------------------------------------------------
-
-	"idle_inhibitor": {
-		"format": "{icon}",
-		"format-icons": {
-			"activated": "",
-			"deactivated": "鬒"
-		}
-	},
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
 
 	"battery": {
-		"interval": 1,
+		"interval": 10,
 		"states": {
 			"warning": 30,
 			"critical": 15
 		},
-		"format": " {capacity}%", // Icon: bolt
-		"format-discharging": "{icon} {capacity}%",
+		"format-time": "{H}:{M:02}",
+		"format": "{icon}   {capacity}% ({time})",
+		"format-charging": " {capacity}% ({time})",
+		"format-charging-full": " {capacity}%",
+		"format-full": "{icon} {capacity}%",
+		"format-alt": "{icon}   {power}W",
 		"format-icons": [
-			"", // Icon: battery-full
-			"", // Icon: battery-three-quarters
-			"", // Icon: battery-half
-			"", // Icon: battery-quarter
-			""  // Icon: battery-empty
+			"",
+			"",
+			"",
+			"",
+			""
 		],
 		"tooltip": false
 	},
@@ -96,142 +67,101 @@
 
 	"clock#date": {
 		"interval": 20,
-		"format": "{:%e %b %Y}", // Icon: calendar-alt
-		//"tooltip-format": "{:%e %B %Y}"
+		"format": "{:%e %b %Y}",
 		"tooltip": false
+		//"tooltip-format": "{:%e %B %Y}"
 	},
 
 	"cpu": {
 		"interval": 5,
 		"tooltip": false,
-		"format": "︁ {usage}%", // Icon: microchip
-		"states": {
-		  "warning": 70,
-		  "critical": 90
-		}
-	},
-
-	"sway/language": {
-		"format": "⌨︁ {}",
-		"min-length": 5,
-		"tooltip": false
-	},
-
-	"memory": {
-		"interval": 5,
-		"format": "︁ {}%", // Icon: memory
+		"format": "\uf4bc  {usage}%",
+		"format-alt": "\uf4bc  {load}",
 		"states": {
 			"warning": 70,
 			"critical": 90
 		}
 	},
 
+	"sway/language": {
+		"format": " {}",
+		"min-length": 5,
+		"on-click": "swaymsg 'input * xkb_switch_layout next'",
+		"tooltip": false
+	},
+
+	"memory": {
+		"interval": 5,
+		"format": "\ue266  {percentage}%",
+		"states": {
+			"warning": 75,
+			"critical": 90
+		},
+        "tooltip-format": "Mem: {used:0.1f}/{total} GiB\nSwap: {swapUsed:0.1f}/{swapTotal} GiB"
+	},
+
 	"network": {
 		"interval": 5,
-		"format-wifi": "︁ {essid} ({signalStrength}%)", // Icon: wifi
-		//"format-ethernet": " {ifname}: {ipaddr}/{cidr}", // Icon: ethernet
-		"format-ethernet": "󰇚 {bandwidthTotalBytes}",
-		"format-disconnected": "×︁",
-		"tooltip-format": "{ifname}: {ipaddr} ({essid}, {signalStrength})",
-		"tooltip": true
-		//"on-click": "cmst"
+		"format-wifi": "  {essid} ({signalStrength}%)",
+		"format-ethernet": " {ifname}",
+		"format-disconnected": "No connection",
+		"format-alt": "  {ipaddr}/{cidr}",
+		"tooltip": false
 	},
 
 	"sway/mode": {
-		"format": "<span style=\"italic\"> {}</span>", // Icon: expand-arrows-alt
+		"format": "{}",
 		"tooltip": false
 	},
 
 	"sway/window": {
 		"format": "{}",
-		"max-length": 50,
+		"max-length": 30,
 		"tooltip": false
 	},
 
 	"sway/workspaces": {
-		"all-outputs": false,
-		"disable-scroll": false,
-		"format": "{name}",
-		"format-icons": {
-			"1:www": "龜", // Icon: firefox-browser
-			"2:mail": "", // Icon: mail
-			"3:editor": "", // Icon: code
-			"4:terminals": "", // Icon: terminal
-			"5:portal": "", // Icon: terminal
-			"urgent": "",
-			"focused": "",
-			"default": ""
-		}
+		"disable-scroll-wraparound": true,
+		"smooth-scrolling-threshold": 4,
+		"enable-bar-scroll": true,
+		"format": "{name}"
 	},
 
 	"pulseaudio": {
-		"scroll-step": 1,
 		"format": "{icon} {volume}%",
-		"format-bluetooth": "{icon} {volume}%",
+		"format-bluetooth": "{icon}  {volume}%",
 		"format-muted": "",
 		"format-icons": {
-			"headphones": "",
-			"handsfree": "",
+			"headphone": "",
+			"hands-free": "",
 			"headset": "",
 			"phone": "",
 			"portable": "",
 			"car": "",
 			"default": ["", ""]
 		},
-		"on-click": "pavucontrol"
-	},
-
-    "custom/wireplumber": {
-        "exec": "$HOME/.config/waybar/custom_modules/custom-wireplumber.sh",
-        "tooltip": false,
-        "signal": 8,
-        "restart-interval": 0,
-        "on-click": "pavucontrol",
-        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+",
-        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-",
-        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-    },
-
-	"custom/gpu": {
-		"exec": "$HOME/.config/waybar/custom_modules/custom-gpu.sh",
-		"return-type": "json",
-		"format": "︁ {}",
-		"interval": 2,
-		"tooltip": "{tooltip}",
-		//"max-length": 19,
-		//"min-length": 19,
-	},
-
-	"custom/mpris": {
-        "exec": "playerctl --ignore-player=chromium -a metadata --format '{\"text\": \"{{markup_escape(title)}}\", \"tooltip\": \"Title: {{markup_escape(title)}}\\nArtist: {{artist}}\\nAlbum: {{album}}\\nPlayer: {{playerName}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
-		"format": "{icon}{}",
-        "return-type": "json",
-        "format-icons": {
-            "Playing": " ",
-            "Paused": " ",
-        },
-		"on-click": "playerctl --ignore-player=chromium play-pause",
-		"on-scroll-up": "playerctl --ignore-player=chromium next",
-		"on-scroll-down": "playerctl previous",
-		"max-length": 25
-	},
-
-	"custom/alsa": {
-		"exec": "amixer get Master | sed -nre 's/.*\\[off\\].*/ muted/p; s/.*\\[(.*%)\\].*/ \\1/p'",
-		"on-click": "amixer set Master toggle; pkill -x -RTMIN+11 waybar",
-		"on-scroll-up": "amixer set Master 1+; pkill -x -RTMIN+11 waybar",
-		"on-scroll-down": "amixer set Master 1-; pkill -x -RTMIN+11 waybar",
-		"signal": 11,
-		"interval": 10,
+		"scroll-step": 1,
+		"on-click": "pavucontrol",
+        "on-click-middle": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
 		"tooltip": false
 	},
 
-	"sndio": {
-		"format": " {}%"
+	"temperature": {
+		"critical-threshold": 90,
+		"interval": 5,
+		"format": "{icon} {temperatureC}°",
+		"format-icons": [
+			"",
+			"",
+			"",
+			"",
+			""
+		],
+		"tooltip": false
 	},
 
 	"tray": {
-		"icon-size": 21
+		"icon-size": 18
 		//"spacing": 10
 	},
 
@@ -241,32 +171,32 @@
 	},
 
 	"custom/arrow2": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow3": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow4": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow5": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow6": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
 	"custom/arrow7": {
-		"format": "",
+		"format": "",
 		"tooltip": false
 	},
 
@@ -281,12 +211,9 @@
 	},
 
 	"custom/arrow10": {
-		"format": "",
-		"tooltip": false
-	},
-
-	"custom/arrow11": {
 		"format": "",
 		"tooltip": false
 	}
 }
+
+// vi:ft=jsonc

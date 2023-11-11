@@ -6,10 +6,16 @@
 
 # Startup
 exec dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec dbus-launch --exit-with-session pipewire & pipewire-pulse & wireplumber
+exec gentoo-pipewire-launcher &
 exec mako
 exec foot -s
-exec ulauncher
+#exec ulauncher
+
+# xdg portals because desktop linux is hard
+exec /usr/libexec/xdg-desktop-portal-gtk -r
+exec /usr/libexec/xdg-desktop-portal-wlr -r
+exec /usr/libexec/flatpak-portal -r
+exec "sh -c 'sleep 5;exec /usr/libexec/xdg-desktop-portal -r'"
 
 # make first xwayland dispaly the primary one
 exec_always xrandr --output $(xrandr | grep -m 1 XWAYLAND | awk '{print $1;}') --primary
@@ -32,10 +38,13 @@ set $term footclient
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
+#set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
+set $menu bemenu-run -b | xargs swaymsg exec --
 
 # App launcher
 for_window [app_id="ulauncher"] floating enable, border none
+# Processing IDE that my university is forcing upon me
+for_window [class="Processing"] floating enable
 # Steam doesn't really play nice with tiling wm so make it floating
 for_window [class="Steam"] floating enable
 for_window [class="steamwebhelper"] floating enable
@@ -65,26 +74,17 @@ set $lock ~/.config/sway/scripts/lock.sh
 set $slurp ~/.config/sway/scripts/slurp.sh
 
 ### Output configuration
-#
+
+output eDP-1 scale 1.25
 
 # the devil itself
 xwayland enable
 
 # Wallpaper
-output * bg /home/erickv/Others/Wallpapers/98616585_p0.png fill
-
-# Set refresh and pos
-output DP-3 mode 1920x1080@144Hz position 1920,0
-output HDMI-A-3 mode 1920x1080@72Hz position 0,0
-workspace 1 output DP-3
-workspace 2 output HDMI-A-3
-
-# This is the same monitor as DP-3 but connected to dGPU for VM passthrough
-output HDMI-A-1 disable
+output * bg /home/erickv/Pictures/Wallpapers/image1.jpg fill
 
 # VRR
-output DP-3 adaptive_sync on
-output HDMI-A-3 adaptive_sync off
+output * adaptive_sync on
 
 ### Idle configuration
 exec swayidle -w \
@@ -111,6 +111,12 @@ exec swayidle -w \
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
+
+input "1739:52839:SYNA8018:00_06CB:CE67_Touchpad" {
+	tap enabled
+	dwt disabled
+}
+
 # UK keyboard
 input "type:keyboard" {
 	xkb_layout gb
@@ -120,10 +126,6 @@ input "type:keyboard" {
 input "type:pointer" {
 	accel_profile flat
 	pointer_accel 0.0
-}
-
-input "1386:890:Wacom_One_by_Wacom_S_Pen" {
-    map_to_output DP-3
 }
 
 ### Key bindings
@@ -151,6 +153,10 @@ input "1386:890:Wacom_One_by_Wacom_S_Pen" {
     bindsym XF86AudioPrev exec playerctl previous
     bindsym XF86AudioNext exec playerctl next
     bindsym XF86AudioStop exec playerctl stop
+
+    # Backlight keys
+    bindsym XF86MonBrightnessDown exec sudo xbacklight -dec 2
+    bindsym XF86MonBrightnessUp exec sudo xbacklight -inc 4
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -314,25 +320,40 @@ bar {
 
 ## Title bars, focusing, etc
 
+# get gnomed
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'adw-gtk3-dark'
+    gsettings set $gnome-schema	color-scheme 'prefer-dark'
+}
+
+
 # Colours
 
 # Onedark-darker
 # reference: https://github.com/navarasu/onedark.nvim/blob/master/lua/onedark/colors.lua
-set $c0		#1f2329
-set $c1		#e55561
-set $c2  	#8ebd6b
-set $c3 	#e2b86b
-set $c4   	#4fa6ed
-set $c5 	#bf68d9
-set $c6		#48b0bd
-set $c15	#a0a8b7
+set $c0		#282828
+set $c1		#cc241d
+set $c2  	#98971a
+set $c3 	#d79921
+set $c4   	#458588
+set $c5 	#b16286
+set $c6		#689d8a
+set $c7		#a89984
+set $c8		#928374
+set $c9		#fb4934
+set $c10	#b8bb26
+set $c11	#fabd2f
+set $c12	#83a598
+set $c13	#d3869b
+set $c14	#8ec07c
+set $c15	#ebdbb2
+set $c0_h	#1d2021
 
-# class                 border  backgr. text    indicator   child_border
-client.focused 			$c4     $c0     $c4     $c5         $c4
-client.focused_inactive	$c4     $c0     $c4     $c5         $c0
-client.unfocused		$c0     $c0     $c15    $c5         $c0
-client.urgent			$c1     $c1     $c0     $c1         $c1
-client.placeholder
+client.focused 			$c3     $c0_h   $c3     $c5         $c3
+client.focused_inactive	$c0_h   $c0_h   $c3     $c5     $c0_h
+client.unfocused		$c0_h   $c0_h   $c3     $c5         $c0_h
+client.urgent			$c1     $c1     $c15    $c1         $c1
 
 # Align window title to centre of titlebar
 title_align center

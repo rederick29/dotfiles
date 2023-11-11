@@ -12,7 +12,7 @@ Colour schemes I use: (and whether I'm still updating them)
   </tr>
   <tr>
     <td>Gruvbox</td>
-    <td>unmaintained</td>
+    <td>using on non-primary machine</td>
   </tr>
   <tr>
     <td>Own colour scheme</td>
