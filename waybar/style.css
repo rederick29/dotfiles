@@ -1,77 +1,51 @@
-/* =============================================================================
- *
- * Waybar configuration
- *
- * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
- *
- * =========================================================================== */
-
-/* -----------------------------------------------------------------------------
- * Keyframes
- * -------------------------------------------------------------------------- */
-
-@keyframes blink-warning {
-	70% {
-		color: @light;
-	}
-
-	to {
-		color: @light;
-		background-color: @warning;
-	}
-}
+/* Keyframes */
 
 @keyframes blink-critical {
-	70% {
-		color: @light;
-	}
-
 	to {
-		color: @light;
+		/*color: @white;*/
 		background-color: @critical;
 	}
 }
 
 
-/* COLOURS */
+/* Styles */
 
-/* Sidetracked Day 
-@define-color light #f9f3c3;
-@define-color dark #161628;
-@define-color warning #fabd2f;
-@define-color critical #cc241d;
-@define-color mode #a89984;
-@define-color workspaces #44517f;
-@define-color workspacesfocused #697398;
-@define-color sound #fec133;
-@define-color network #e5be99;
-@define-color memory #de9a97;
-@define-color cpu #968b9d;
-@define-color gpu #5991d2;
-@define-color layout #374a8c;
-@define-color battery #161628;
-@define-color date #161628;
-@define-color time #f9f3c3;
-*/
+/* Colors (gruvbox) */
+@define-color black	#282828;
+@define-color red	#cc241d;
+@define-color green	#98971a;
+@define-color yellow	#d79921;
+@define-color blue	#458588;
+@define-color purple	#b16286;
+@define-color aqua	#689d6a;
+@define-color gray	#a89984;
+@define-color brgray	#928374;
+@define-color brred	#fb4934;
+@define-color brgreen	#b8bb26;
+@define-color bryellow	#fabd2f;
+@define-color brblue	#83a598;
+@define-color brpurple	#d3869b;
+@define-color braqua	#8ec07c;
+@define-color white	#ebdbb2;
+@define-color bg2	#504945;
 
-/* Gruvbox */ 
-@define-color light #ebdbb2;
-@define-color dark #282828;
-@define-color warning #fabd2f;
-@define-color critical #cc241d;
-@define-color mode #a89984;
-@define-color workspaces #458588;
-@define-color workspacesfocused #83a598;
-@define-color sound #fabd2f;
-@define-color getplayerctl #d79921;
-@define-color network #8ec07c;
-@define-color memory #689d6a;
-@define-color cpu #83a598;
-@define-color gpu #458588;
-@define-color layout #b16286;
-@define-color battery #282828;
-@define-color date #282828;
-@define-color time #ebdbb2; 
+
+@define-color warning 	@bryellow;
+@define-color critical	@red;
+@define-color mode	@black;
+@define-color unfocused	@bg2;
+@define-color focused	@braqua;
+@define-color inactive	@purple;
+@define-color sound	@brpurple;
+@define-color network	@purple;
+@define-color memory	@braqua;
+@define-color cpu	@blue;
+@define-color temp	@brgreen;
+@define-color layout	@bryellow;
+@define-color backlight @bryellow;
+@define-color battery	@green;
+@define-color date	@black;
+@define-color time	@white;
 
 /* Reset all styles */
 * {
@@ -80,20 +54,21 @@
 	min-height: 0;
 	margin: 0;
 	padding: 0;
+	box-shadow: none;
+	text-shadow: none;
+	icon-shadow: none;
 }
 
 /* The whole bar */
 #waybar {
-	background: transparent;
-	color: @dark;
-	font-family: Terminus, Siji;
+	background: rgba(40, 40, 40, 0.8784313725); /* #282828e0 */
+	color: @white;
+	font-family: JetBrains Mono, Siji;
 	font-size: 10pt;
 	/*font-weight: bold;*/
 }
 
 /* Each module */
-/*#custom-waybar-mpris,*/
-#idle_inhibitor,
 #battery,
 #clock,
 #cpu,
@@ -102,137 +77,123 @@
 #mode,
 #network,
 #pulseaudio,
-#custom-gpu,
-#custom-getplayerctl,
-#custom-alsa,
-#sndio,
-#tray {
-	padding-left: 10px;
-	padding-right: 10px;
-}
-
-/* Each module that should blink */
-#mode,
-#memory,
-/*#custom-gpu,*/
-#battery {
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
+#temperature,
+#tray,
+#backlight,
+#idle_inhibitor,
+#disk,
+#user,
+#mpris {
+	padding-left: 8pt;
+	padding-right: 8pt;
 }
 
 /* Each critical module */
-#memory.critical,
-#cpu.critical,
-#battery.critical {
-	color: @critical;
-}
-
-/* Each critical that should blink */
 #mode,
 #memory.critical,
+#cpu.critical,
+#temperature.critical,
 #battery.critical.discharging {
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
 	animation-name: blink-critical;
-	animation-duration: 2s;
+	animation-duration: 1s;
 }
 
 /* Each warning */
 #network.disconnected,
 #memory.warning,
 #cpu.warning,
-#battery.warning {
-	color: @warning;
-}
-
-/* Each warning that should blink */
+#temperature.warning,
 #battery.warning.discharging {
-	animation-name: blink-warning;
-	animation-duration: 3s;
+	color: @warning;
 }
 
 /* And now modules themselves in their respective order */
 
-#mode { /* Shown current Sway mode (resize etc.) */
-	color: @light;
+/* Current sway mode (resize etc) */
+#mode {
+	color: @white;
 	background: @mode;
-}
-
-#idle_inhibitor {
-	padding-left: 4px;
-	color: @dark;
-	background: @workspaces;
 }
 
 /* Workspaces stuff */
 #workspaces button {
 	/*font-weight: bold;*/
-	padding-left: 4px;
-	padding-right: 4px;
-	color: @dark;
-	background: @workspaces;
+	padding-left: 2pt;
+	padding-right: 2pt;
+	color: @white;
+	background: @unfocused;
 }
 
+/* Inactive (on unfocused output) */
+#workspaces button.visible {
+	color: @white;
+	background: @inactive;
+}
+
+/* Active (on focused output) */
 #workspaces button.focused {
-	background: @workspacesfocused;
+	color: @black;
+	background: @focused;
 }
 
-/*#workspaces button.urgent {
-	border-color: #c9545d;
-	color: #c9545d;
-}*/
+/* Contains an urgent window */
+#workspaces button.urgent {
+	color: @black;
+	background: @warning;
+}
+
+/* Style when cursor is on the button */
+#workspaces button:hover {
+	background: @black;
+	color: @white;
+}
 
 #window {
-	margin-right: 40px;
-	margin-left: 40px;
+	margin-right: 35pt;
+	margin-left: 35pt;
 }
 
-/*#custom-waybar-mpris {
-	padding-left: 4px;
-	padding-right: 4px;
-	color: @light;
-	background: @dark;
-}*/
-
-#custom-alsa,
-#pulseaudio,
-#sndio {
+#pulseaudio {
 	background: @sound;
-	color: @dark;
-}
-
-#custom-getplayerctl {
-	background: @getplayerctl;
-	color: @light;
+	color: @black;
 }
 
 #network {
 	background: @network;
-	color: @dark;
+	color: @white;
 }
 
 #memory {
 	background: @memory;
-	color: @dark;
+	color: @black;
 }
 
 #cpu {
 	background: @cpu;
-	color: @dark;
+	color: @white;
 }
 
-#custom-gpu {
-	background: @gpu;
-	color: @light;
+#temperature {
+	background: @temp;
+	color: @black;
 }
 
 #language {
 	background: @layout;
-	color: @light;
+	color: @black;
+}
+
+#backlight {
+    background: @backlight;
+    color: @black;
 }
 
 #battery {
 	background: @battery;
-	color: @dark;
+	color: @white;
 }
 
 #tray {
@@ -241,80 +202,70 @@
 
 #clock.date {
 	background: @date;
-	color: @light;
+	color: @white;
 }
 
 #clock.time {
 	background: @time;
-	color: @dark;
-}
-
-#pulseaudio.muted {
-	/* No styles */
+	color: @black;
 }
 
 #custom-arrow1 {
-	font-size: 16px;
-	color: @sound;
-	background: transparent;
-}
-
-#custom-arrow2 {
-	font-size: 16px;
-	color: @getplayerctl;
-	background: @sound;
-}
-
-#custom-arrow3 {
-	font-size: 16px;
-	color: @network;
-	background: @getplayerctl;
-}
-
-#custom-arrow4 {
-	font-size: 16px;
-	color: @memory;
-	background: @network;
-}
-
-#custom-arrow5 {
-	font-size: 16px;
-	color: @cpu;
-	background: @memory;
-}
-
-#custom-arrow6 {
-	font-size: 16px;
-	color: @gpu;
-	background: @cpu;
-}
-
-#custom-arrow7 {
-	font-size: 16px;
-	color: @layout;
-	background: @gpu;
-}
-
-#custom-arrow8 {
-	font-size: 16px;
-	color: @battery;
-	background: @layout;
-}
-
-#custom-arrow9 {
-	font-size: 16px;
-	color: @date;
-	background: @battery;
-}
-
-#custom-arrow10 {
-	font-size: 16px;
+	font-size: 11pt;
 	color: @time;
 	background: @date;
 }
 
-#custom-arrow11 {
-	font-size: 16px;
-	color: @workspaces;
+#custom-arrow2 {
+	font-size: 11pt;
+	color: @date;
+	background: @backlight;
+}
+
+#custom-arrow3 {
+	font-size: 11pt;
+	color: @backlight;
+	background: @battery;
+}
+
+#custom-arrow4 {
+	font-size: 11pt;
+	color: @battery;
+	background: @temp;
+}
+
+#custom-arrow5 {
+	font-size: 11pt;
+	color: @temp;
+	background: @cpu;
+}
+
+#custom-arrow6 {
+	font-size: 11pt;
+	color: @cpu;
+	background: @memory;
+}
+
+#custom-arrow7 {
+	font-size: 11pt;
+	color: @memory;
+	background: @network;
+}
+
+#custom-arrow8 {
+	font-size: 11pt;
+	color: @network;
+	background: @sound;
+}
+
+#custom-arrow9 {
+	font-size: 11pt;
+	color: @sound;
+	background: transparent;
+}
+
+#custom-arrow10 {
+	font-size: 11pt;
+	color: @unfocused;
 	background: transparent;
 }

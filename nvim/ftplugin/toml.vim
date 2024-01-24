@@ -1,0 +1,12 @@
+command CratesUIToggle lua require('crates').toggle()
+command CratesReload lua require('crates').reload()
+command CratesUpdate lua require('crates').update_crate()
+command CratesUpdateAll lua require('crates').update_all_crates()
+command CratesOpenDocs lua require('crates').open_documentation()
+command CratesOpenWeb lua require('crates').open_crates_io()
+command CratesOpenRepo lua require('crates').open_repository()
+command CratesShow lua require('crates').show_popup()
+command CratesShowVer lua require('crates').show_versions_popup()
+command CratesShowDep lua require('crates').show_dependencies_popup()
+command CratesShowFeatures lua require('crates').show_features_popup()
+

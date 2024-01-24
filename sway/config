@@ -4,8 +4,21 @@
 #
 # Read `man 5 sway` for a complete reference.
 
-# Start notification daemon
+# Startup
+exec dbus-update-activation-environment DISPLAY I3SOCK SWAYSOCK WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec gentoo-pipewire-launcher &
 exec mako
+exec foot -s
+#exec ulauncher
+
+# xdg portals because desktop linux is hard
+exec /usr/libexec/xdg-desktop-portal-gtk -r
+exec /usr/libexec/xdg-desktop-portal-wlr -r
+exec /usr/libexec/flatpak-portal -r
+exec "sh -c 'sleep 5;exec /usr/libexec/xdg-desktop-portal -r'"
+
+# make first xwayland dispaly the primary one
+exec_always xrandr --output $(xrandr | grep -m 1 XWAYLAND | awk '{print $1;}') --primary
 
 ### Variables
 
@@ -19,12 +32,44 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term kitty
+set $term footclient
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu dmenu_path | dmenu | xargs swaymsg exec --
+# set $menu dmenu_path | dmenu | xargs swaymsg exec --
+#set $menu GDK_BACKEND=wayland ulauncher-toggle --hide-window
+set $menu bemenu-run -b | xargs swaymsg exec --
+
+# App launcher
+for_window [app_id="ulauncher"] floating enable, border none
+# Processing IDE that my university is forcing upon me
+for_window [class="Processing"] floating enable
+no_focus [class="processing-core-PApplet"]
+# Steam doesn't really play nice with tiling wm so make it floating
+for_window [class="Steam"] floating enable
+for_window [class="steamwebhelper"] floating enable
+# Zoom crashes if its tiling by default (?)
+for_window [app_id="zoom"] floating enable
+for_window [class="zoom "] floating enable
+# Append xwayland to window title
+for_window [shell="xwayland"] title_format "%title (%shell)"
+# firefox fullscreen inhibit idling
+for_window [app_id="firefox"] inhibit_idle fullscreen
+
+# Waydroid multi-window
+#for_window [app_id="waydroid*"] floating enable
+
+# https://grtcdr.tn/posts/2022-12-16.html
+for_window [title="Picture-in-Picture"] {
+    floating enable
+    resize set height 280
+    resize set width  500
+    border none
+    sticky toggle
+    move position 1420 800
+    opacity 0.75
+}
 
 # Scripts
 set $grim ~/.config/sway/scripts/grim.sh
@@ -32,18 +77,13 @@ set $lock ~/.config/sway/scripts/lock.sh
 set $slurp ~/.config/sway/scripts/slurp.sh
 
 ### Output configuration
-#
+output eDP-1 scale 1.25
 
 # the devil itself
 xwayland enable
 
 # Wallpaper
-output * bg /home/erickv/Downloads/map/BG.jpg fill
-#output HDMI-A-2 bg /home/erickv/Downloads/wall_secondary.png fill
-
-# Set refresh and pos
-output DP-1 mode 1920x1080@144Hz position 0,0
-output HDMI-A-2 position 1920,0
+output * bg /home/erickv/Pictures/Wallpapers/image1.jpg fill
 
 # VRR
 output * adaptive_sync on
@@ -51,9 +91,8 @@ output * adaptive_sync on
 ### Idle configuration
 exec swayidle -w \
          timeout 300 '$lock' \
-         timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         timeout 330 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          timeout 10 'if pgrep -x swaylock; then swaymsg "output * dpms off"; fi' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'playerctl pause' \
          before-sleep '$lock'
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -74,9 +113,15 @@ exec swayidle -w \
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 
+
+input "1739:52839:SYNA8018:00_06CB:CE67_Touchpad" {
+	tap enabled
+	dwt disabled
+}
+
 # UK keyboard
 input "type:keyboard" {
-	xkb_layout custom
+	xkb_layout gb
 	xkb_model "pc104"
 }
 
@@ -92,7 +137,7 @@ input "type:pointer" {
 	# Screenshotting
 	bindsym Print exec $grim
 	bindsym $mod+Print exec $slurp
-	
+
     # Start a terminal
     bindsym $mod+Return exec $term
 
@@ -101,6 +146,19 @@ input "type:pointer" {
 
     # Start your launcher
     bindsym $mod+d exec $menu
+
+    # Media Keys
+    bindsym XF86AudioRaiseVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%+"
+    bindsym XF86AudioLowerVolume exec "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
+    bindsym XF86AudioMute exec "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    bindsym XF86AudioPlay exec playerctl play-pause
+    bindsym XF86AudioPrev exec playerctl previous
+    bindsym XF86AudioNext exec playerctl next
+    bindsym XF86AudioStop exec playerctl stop
+
+    # Backlight keys
+    bindsym XF86MonBrightnessDown exec brightnessctl set 2%-
+    bindsym XF86MonBrightnessUp exec brightnessctl set 4%+
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -115,7 +173,7 @@ input "type:pointer" {
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 	bindsym $mod+p exec $lock
-	
+
 #
 # Moving around:
 #
@@ -125,7 +183,7 @@ input "type:pointer" {
 	floating_modifier $mod normal
 	# $mod + full stop button toggles between floating and tiling
 	bindsym $mod+period floating toggle
-	
+
     # Move your focus around
     bindsym $mod+$left focus left
     bindsym $mod+$down focus down
@@ -255,16 +313,27 @@ bindsym $mod+r mode "resize"
 #}
 
 bar {
-	swaybar_command waybar
+    swaybar_command waybar
+    position top
+    hidden_state show
+    mode dock
+    modifier none
 }
-
 
 ## Title bars, focusing, etc
 
+# get gnomed
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'adw-gtk3-dark'
+    gsettings set $gnome-schema	color-scheme 'prefer-dark'
+}
+
+
 # Colours
 
-# gruvbox much?
-# reference: https://github.com/morhetz/gruvbox#palette
+# Onedark-darker
+# reference: https://github.com/navarasu/onedark.nvim/blob/master/lua/onedark/colors.lua
 set $c0		#282828
 set $c1		#cc241d
 set $c2  	#98971a
@@ -283,12 +352,10 @@ set $c14	#8ec07c
 set $c15	#ebdbb2
 set $c0_h	#1d2021
 
-# class                 border  backgr. text    indicator child_border
-client.focused 			$c3 	$c0_h	$c3		$c5		  $c3 
-client.focused_inactive	$c0_h	$c0_h	$c3		$c5		  $c0_h
-client.unfocused		$c0_h	$c0_h	$c3		$c5		  $c0_h
-client.urgent			$c1 	$c1 	$c15	$c1 	  $c1
-client.placeholder		
+client.focused 			$c3     $c0_h   $c3     $c5         $c3
+client.focused_inactive	$c0_h   $c0_h   $c3     $c5     $c0_h
+client.unfocused		$c0_h   $c0_h   $c3     $c5         $c0_h
+client.urgent			$c1     $c1     $c15    $c1         $c1
 
 # Align window title to centre of titlebar
 title_align center
@@ -297,7 +364,7 @@ title_align center
 # with titlebar = normal, without = pixel
 # default_border normal 1
 default_border pixel 1
-hide_edge_borders none 
+hide_edge_borders none
 
 # Gaps
 gaps inner 5
